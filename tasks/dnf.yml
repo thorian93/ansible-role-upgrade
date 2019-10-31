@@ -1,0 +1,33 @@
+---
+- name: Mark packages on hold.
+  lineinfile:
+    path: /etc/dnf/dnf.conf
+    line: 'exclude={{ item }}'
+    state: present
+  with_items: "{{ upgrade_packages_on_hold }}"
+
+- name: Upgrade via DNF.
+  dnf:
+    name: "*"
+    state: latest
+
+- name: Cleanup via DNF.
+  dnf:
+    autoremove: yes
+  ignore_errors: true # DNF Version too low
+
+- name: Unhold packages.
+  lineinfile:
+    path: /etc/dnf/dnf.conf
+    line: 'exclude={{ item }}'
+    state: absent
+  with_items: "{{ upgrade_packages_on_hold }}"
+
+- name: Check for reboot hint.
+  shell: needs-restarting
+  register: reboot_hint_dnf
+
+- name: Set Reboot Hint.
+  set_fact:
+    reboot_hint: true
+  when: reboot_hint_dnf.stdout != ""

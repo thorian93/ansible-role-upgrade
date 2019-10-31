@@ -1,0 +1,34 @@
+---
+- name: Mark packages on hold.
+  lineinfile:
+    path: /etc/yum.conf
+    line: 'exclude={{ item }}'
+    state: present
+  with_items: "{{ upgrade_packages_on_hold }}"
+
+- name: Upgrade via YUM.
+  yum:
+    name: "*"
+    state: latest
+    update_cache: yes
+
+- name: Cleanup via YUM.
+  yum:
+    state: absent
+    autoremove: yes
+
+- name: Unhold packages.
+  lineinfile:
+    path: /etc/yum.conf
+    line: 'exclude={{ item }}'
+    state: absent
+  with_items: "{{ upgrade_packages_on_hold }}"
+
+- name: Check for reboot hint.
+  shell: needs-restarting
+  register: reboot_hint_yum
+
+- name: Set Reboot Hint.
+  set_fact:
+    reboot_hint: true
+  when: reboot_hint_yum.stdout != ""

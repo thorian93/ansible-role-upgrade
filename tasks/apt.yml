@@ -1,0 +1,48 @@
+---
+- name: Update APT Cache.
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Mark packages on hold.
+  shell: apt-mark hold {{ item }}
+  args:
+    executable: /bin/bash
+  with_items: "{{ upgrade_packages_on_hold }}"
+  register: upgrade_apt_mark_status
+  changed_when: upgrade_apt_mark_status.rc == 0 or "No packages found" in upgrade_apt_mark_status.stderr
+  failed_when: upgrade_apt_mark_status.rc == 1000
+
+- name: Upgrade via APT.
+  apt:
+    upgrade: dist
+    state: latest
+    update_cache: yes
+
+- name: Cleanup via APT - autoremove.
+  apt:
+    autoremove: yes
+    purge: yes
+
+- name: Cleanup via APT - autoclean.
+  apt:
+    autoclean: yes
+
+- name: Unhold packages.
+  shell: apt-mark unhold {{ item }}
+  args:
+    executable: /bin/bash
+  with_items: "{{ upgrade_packages_on_hold }}"
+  register: upgrade_apt_mark_status
+  changed_when: upgrade_apt_mark_status.rc == 0 or "No packages found" in upgrade_apt_mark_status.stderr
+  failed_when: upgrade_apt_mark_status.rc == 1000
+
+
+- name: Check for reboot hint.
+  shell: checkrestart
+  register: reboot_hint_apt
+
+- name: Set Reboot Hint.
+  set_fact:
+    reboot_hint: true
+  when: "'Found 0 processes using old versions of upgraded files' not in reboot_hint_apt.stdout"

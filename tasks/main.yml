@@ -1,0 +1,30 @@
+---
+- name: Include package manager specific playbook.
+  include_tasks: "{{ ansible_pkg_mgr }}.yml"
+
+- name: Reboot Server.
+  become: yes
+  shell: 'sleep 1 && shutdown -r now "Reboot triggered by Ansible" && sleep 1'
+  async: 1
+  poll: 0
+  when: reboot_hint is defined and reboot_hint
+
+- name: Wait for server to restart.
+  local_action:
+    module: wait_for
+      host={{ ansible_host }}
+      port=22
+      delay=10
+      timeout=300
+  become: false
+  when: reboot_hint is defined and reboot_hint
+
+- name: Check Kernel Version and Uptime.
+  shell: 'echo $(/bin/uname -r)  $(uptime | cut -d" " -f3,4,5)'
+  args:
+    executable: /bin/bash
+  register: patchday_status
+
+- name: Print Kernel Version and Uptime.
+  debug:
+    var: patchday_status.stdout
