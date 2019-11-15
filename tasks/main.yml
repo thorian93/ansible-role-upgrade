@@ -19,7 +19,9 @@
       delay=10
       timeout=300
   become: false
-  when: reboot_hint is defined and reboot_hint
+  when:
+    - reboot_hint is defined and reboot_hint
+    - upgrade_unattended_reboot
 
 - name: Check Kernel Version and Uptime.
   shell: 'echo $(/bin/uname -r)  $(uptime | cut -d" " -f3,4,5)'

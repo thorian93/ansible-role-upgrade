@@ -1,4 +1,9 @@
 ---
+- name: Ensure Dependencies are present.
+  package:
+    name: dnf-utils
+    state: present
+
 - name: Mark packages on hold.
   lineinfile:
     path: /etc/dnf/dnf.conf
@@ -22,11 +27,6 @@
     line: 'exclude={{ item }}'
     state: absent
   with_items: "{{ upgrade_packages_on_hold }}"
-
-- name: Install the latest version of dnf-utils
-  dnf:
-    name: dnf-utils
-    state: latest
 
 - name: Check for reboot hint.
   shell: dnf needs-restarting -r

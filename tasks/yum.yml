@@ -1,4 +1,9 @@
 ---
+- name: Ensure Dependencies are present.
+  package:
+    name: yum-utils
+    state: present
+
 - name: Mark packages on hold.
   lineinfile:
     path: /etc/yum.conf
