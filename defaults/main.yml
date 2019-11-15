@@ -1,2 +1,3 @@
 ---
 upgrade_packages_on_hold: []
+upgrade_unattended_reboot: "true"
