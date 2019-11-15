@@ -19,6 +19,9 @@ Available variables are listed below, along with default values (see `defaults/m
 
 Set packages which you don't want to upgrade automatically on hold before upgrading.
 
+    upgrade_unattended_reboot: "true"
+Default is true, set to false if you do not want to reboot automatically after installing updates which require reboot.
+
 ## Dependencies
 
 None.

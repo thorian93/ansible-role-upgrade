@@ -23,11 +23,17 @@
     state: absent
   with_items: "{{ upgrade_packages_on_hold }}"
 
+- name: Install the latest version of dnf-utils
+  dnf:
+    name: dnf-utils
+    state: latest
+
 - name: Check for reboot hint.
-  shell: needs-restarting
+  shell: dnf needs-restarting -r
   register: reboot_hint_dnf
+  failed_when: reboot_hint_dnf.rc >= 2
 
 - name: Set Reboot Hint.
   set_fact:
     reboot_hint: true
-  when: reboot_hint_dnf.stdout != ""
+  when: reboot_hint_dnf.rc == 1
