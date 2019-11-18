@@ -1,4 +1,11 @@
 ---
+- name: Preflight - Fail if target host is not stable for this Role.
+  fail:
+    msg: "This role is not stable for the target operating system, {{ ansible_distribution }} {{ ansible_distribution_major_version }}."
+  when: (ansible_distribution is not defined) or
+        (ansible_distribution_version is not defined) or
+        (ansible_distribution+" "+ansible_distribution_major_version not in upgrade_stable_os)
+
 - name: Include package manager specific playbook.
   include_tasks: "{{ ansible_pkg_mgr }}.yml"
 
@@ -8,8 +15,8 @@
   async: 1
   poll: 0
   when: 
-    - reboot_hint is defined and reboot_hint 
-    - upgrade_unattended_reboot
+    - reboot_hint is defined and reboot_hint | bool
+    - upgrade_unattended_reboot | bool
 
 - name: Wait for server to restart.
   local_action:
@@ -20,8 +27,8 @@
       timeout=300
   become: false
   when:
-    - reboot_hint is defined and reboot_hint
-    - upgrade_unattended_reboot
+    - reboot_hint is defined and reboot_hint | bool
+    - upgrade_unattended_reboot | bool
 
 - name: Check Kernel Version and Uptime.
   shell: 'echo $(/bin/uname -r)  $(uptime | cut -d" " -f3,4,5)'
