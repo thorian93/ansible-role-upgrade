@@ -38,6 +38,19 @@ Enable unattended reboot in case it is necessary after updates. Default is `true
 
 None.
 
+## OS Compatibility
+This role ensures that it is not used against unsupported or untested operating systems by checking, if the right distribution name and major version number are present in a dedicated variable named like `<role-name>_stable_os`. You can find the variable in the role's default variable file at `defaults/main.yml`:
+
+    upgrade_stable_os:
+      - Debian 10
+      - Ubuntu 18
+      - CentOS 7
+      - Fedora 30
+
+If the combination of distribution and major version number do not match the target system, the role will fail. To allow the role to work add the distribution name and major version name to that variable and you are good to go. But please test the new combination first!
+
+Kudos to [HarryHarcourt](https://github.com/HarryHarcourt) for this idea!
+
 ## Example Playbook
 
     - hosts: foobar
@@ -55,7 +68,7 @@ This role is provided AS IS and I can and will not guarantee that the role works
 
 ## License
 
-GPLv3
+MIT
 
 ## Author Information
 
