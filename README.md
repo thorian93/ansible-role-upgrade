@@ -13,6 +13,12 @@ For both Fedora and RHEL/CentOS a reboot will be performed based on the return c
 
 Neither of these methods are perfect but it works reasonably good. You might want to look through the role before using it though.
 
+## Known issues
+
+- CentOS 8: Reboot detection does not work as there is a flag missing for the dnf needs-restarting plugin. No reboot will be performed at any time.
+- Fedora 30: Wrong dependency resolution inside Ansible causes trouble installing dependent tool. Has to be fixed by setting `ansible_python_interpreter` accordingly.
+- openSUSE Leap 42: A missing dependency does not allow installation of a dependent tool. A workaround is in place.
+
 ## Requirements
 
 No special requirements; note that this role requires root access, so either run it in a playbook with a global `become: yes`, or invoke the role in your playbook like:
@@ -21,6 +27,8 @@ No special requirements; note that this role requires root access, so either run
       roles:
         - role: ansible-role-upgrade
           become: yes
+
+Also this role only **checks if the system is available at port 22** after a reboot. For further checks and monitoring refer to my [ansible-playbooks](https://github.com/thorian93/ansible-playbooks) repository and look for the example `ansible-role-upgrade.yml` and the corresponding `checkhost.yml` playbooks.
 
 ## Role Variables
 
@@ -39,6 +47,7 @@ Enable unattended reboot in case it is necessary after updates. Default is `true
 None.
 
 ## OS Compatibility
+
 This role ensures that it is not used against unsupported or untested operating systems by checking, if the right distribution name and major version number are present in a dedicated variable named like `<role-name>_stable_os`. You can find the variable in the role's default variable file at `defaults/main.yml`:
 
     upgrade_stable_os:
