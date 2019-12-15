@@ -30,10 +30,12 @@
   with_items: "{{ upgrade_packages_on_hold }}"
 
 - name: Check for reboot hint.
-  shell: needs-restarting
+  shell: needs-restarting -r
   register: reboot_hint_yum
+  failed_when: reboot_hint_yum.rc >= 2
+  changed_when: reboot_hint_yum.rc == 1
 
 - name: Set Reboot Hint.
   set_fact:
     reboot_hint: true
-  when: reboot_hint_yum.stdout != ""
+  when: reboot_hint_yum.rc == 1
