@@ -6,9 +6,11 @@ upgrade_stable_os:
   - Ubuntu 16
   - Ubuntu 18
   - CentOS 7
-#  - CentOS 8
+  - CentOS 8
   - Fedora 30
   - Fedora 31
+  - openSUSE Leap 42
 
 upgrade_packages_on_hold: []
 upgrade_unattended_reboot: "true"
+upgrade_force_reboot: "false"
