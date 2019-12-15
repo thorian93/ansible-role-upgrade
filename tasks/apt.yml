@@ -20,7 +20,7 @@
 
 - name: Upgrade via APT.
   apt:
-    upgrade: dist
+    upgrade: safe
     state: latest
     update_cache: yes
 
@@ -42,10 +42,10 @@
   changed_when: upgrade_apt_mark_status.rc == 0 or "No packages found" in upgrade_apt_mark_status.stderr
   failed_when: upgrade_apt_mark_status.rc == 1000
 
-
 - name: Check for reboot hint.
   shell: needrestart -b
   register: reboot_hint_apt
+  changed_when: "'NEEDRESTART-SVC' in reboot_hint_apt.stdout or 'NEEDRESTART-KSTA: 1' not in reboot_hint_apt.stdout"
 
 - name: Set Reboot Hint.
   set_fact:
