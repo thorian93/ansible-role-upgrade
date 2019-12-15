@@ -15,27 +15,15 @@
   async: 1
   poll: 0
   when: 
-    - reboot_hint is defined and reboot_hint | bool
-    - upgrade_unattended_reboot | bool
+    - ((reboot_hint is defined and reboot_hint | bool) and (upgrade_unattended_reboot | bool)) or (upgrade_force_reboot | bool)
 
 - name: Wait for server to restart.
   local_action:
     module: wait_for
-      host={{ ansible_host }}
+      host={{ inventory_hostname }}
       port=22
       delay=10
       timeout=300
   become: false
   when:
-    - reboot_hint is defined and reboot_hint | bool
-    - upgrade_unattended_reboot | bool
-
-- name: Check Kernel Version and Uptime.
-  shell: 'echo $(/bin/uname -r)  $(uptime | cut -d" " -f3,4,5)'
-  args:
-    executable: /bin/bash
-  register: patchday_status
-
-- name: Print Kernel Version and Uptime.
-  debug:
-    var: patchday_status.stdout
+    - ((reboot_hint is defined and reboot_hint | bool) and (upgrade_unattended_reboot | bool)) or (upgrade_force_reboot | bool)
