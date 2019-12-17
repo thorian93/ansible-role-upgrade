@@ -42,6 +42,10 @@ Set packages which you don't want to upgrade automatically on hold before upgrad
 
 Enable unattended reboot in case it is necessary after updates. Default is `true`, set to `false` to disable reboots.
 
+    upgrade_force_reboot: "false"
+
+Force a reboot of each server independent of the result of the reboot check. Default is `false`, set to `true` to enable forced reboots.
+
 ## Dependencies
 
 None.
