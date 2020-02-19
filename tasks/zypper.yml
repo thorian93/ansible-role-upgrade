@@ -3,7 +3,7 @@
   shell: zypper in -y python-xml
   args:
     warn: false
-  when: ansible_distribution == "openSUSE Leap" and ansible_distribution_major_version == "42"
+  when: ansible_distribution == "openSUSE Leap" #and ansible_distribution_major_version == "42"
 
 - name: Ensure Dependencies are present.
   package:

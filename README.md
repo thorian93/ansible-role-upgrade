@@ -17,7 +17,7 @@ Neither of these methods are perfect but it works reasonably good. You might wan
 
 - CentOS 8: Reboot detection does not work as there is a flag missing for the dnf needs-restarting plugin. No reboot will be performed at any time.
 - Fedora 30: Wrong dependency resolution inside Ansible causes trouble installing dependent tool. Has to be fixed by setting `ansible_python_interpreter` accordingly.
-- openSUSE Leap 42: A missing dependency does not allow installation of a dependent tool. A workaround is in place.
+- **openSUSE Leap 15 and 42**: A missing dependency does not allow installation of a dependent tool. A workaround is in place. Also the upgrade process seems unstable. I will list these distributions as stable regarding below mentioned OS compatibility check anyway as currently the role does not seem to break stuff, but please be careful! Also feel free to give me a hint, if you know how to fix this stuff.
 
 ## Requirements
 
@@ -85,4 +85,4 @@ MIT
 
 ## Author Information
 
-This role was created in 2019 by [Thorian93](https://thorian93.de/).
+This role was created in 2019 by [Thorian93](http://thorian93.de/).
