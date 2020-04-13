@@ -1,8 +1,0 @@
----
-- name: "Run role ansible-role-upgrade."
-  hosts: all
-  become: yes
-  environment:
-     ANSIBLE_ROLES_PATH: "../"
-  roles: 
-    - ansible-role-upgrade
