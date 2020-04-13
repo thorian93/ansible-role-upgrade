@@ -66,8 +66,14 @@ Kudos to [HarryHarcourt](https://github.com/HarryHarcourt) for this idea!
 
 ## Example Playbook
 
-    - hosts: foobar
+This repository contains an example playbook which will run this role against all supplied hosts. See below for the playbook content.
+
+    ---
+    - name: "Run role."
+      hosts: all
       become: yes
+      environment:
+        ANSIBLE_ROLES_PATH: "./"
       roles:
         - ansible-role-upgrade
 
