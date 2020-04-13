@@ -1,0 +1,7 @@
+---
+galaxy_info:
+  author: thorian93
+  description: Ansible Role Upgrade
+  license: "license (MIT)"
+  galaxy_tags:
+    - upgrade
