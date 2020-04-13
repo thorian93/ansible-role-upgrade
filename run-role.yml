@@ -3,6 +3,6 @@
   hosts: all
   become: yes
   environment:
-     ANSIBLE_ROLES_PATH: "./"
+     ANSIBLE_ROLES_PATH: "../"
   roles: 
     - ansible-role-upgrade
