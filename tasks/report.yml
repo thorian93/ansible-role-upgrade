@@ -1,0 +1,18 @@
+---
+- name: "Generate Report Files per Host."
+  become: no
+  template:
+    src: report.j2
+    dest: "{{ upgrade_reporting_path }}/report_{{ inventory_hostname }}.txt"
+  delegate_to: localhost
+
+- name: "Empty Full Report File."
+  become: no
+  shell: 'echo -e "Generated: $(date)\n" > {{ upgrade_reporting_path }}/report_full.txt'
+  delegate_to: localhost
+  run_once: true
+
+- name: "Concatenate Report Files."
+  become: no
+  shell: 'cat {{ upgrade_reporting_path }}/report_{{ inventory_hostname }}.txt >> {{ upgrade_reporting_path }}/report_full.txt'
+  delegate_to: localhost

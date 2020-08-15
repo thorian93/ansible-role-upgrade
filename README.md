@@ -46,6 +46,14 @@ Enable unattended reboot in case it is necessary after updates. Default is `true
 
 Force a reboot of each server independent of the result of the reboot check. Default is `false`, set to `true` to enable forced reboots.
 
+    upgrade_reporting_enable: "false"
+
+Enable the reporting function of this role to output the installed updates and optionally write them to file.
+
+    upgrade_reporting_path: "."
+
+Define where the reports should be placed. Default is your current working directory.
+
 ## Dependencies
 
 None.

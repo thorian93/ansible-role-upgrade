@@ -11,6 +11,14 @@
     state: present
   with_items: "{{ upgrade_packages_on_hold }}"
 
+- name: Store List of Updates for further Inspection.
+  command: yum check-update
+  args:
+    warn: false
+  register: upgrade_update_list_yum
+  failed_when: upgrade_update_list_yum.rc > 100
+  ignore_errors: 'true'
+
 - name: Upgrade via YUM.
   yum:
     name: "*"

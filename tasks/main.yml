@@ -6,10 +6,10 @@
         (ansible_distribution_version is not defined) or
         (ansible_distribution+" "+ansible_distribution_major_version not in upgrade_stable_os)
 
-- name: Include package manager specific playbook.
+- name: "Include Package Manager specific Playbook."
   include_tasks: "{{ ansible_pkg_mgr }}.yml"
 
-- name: Reboot Server.
+- name: "Reboot Server."
   become: yes
   shell: 'sleep 1 && shutdown -r now "Reboot triggered by Ansible" && sleep 1'
   async: 1
@@ -17,13 +17,18 @@
   when:
     - ((reboot_hint is defined and reboot_hint | bool) and (upgrade_unattended_reboot | bool)) or (upgrade_force_reboot | bool)
 
-- name: Wait for server to restart.
-  module: wait_for
-    host={{ inventory_hostname }}
-    port=22
-    delay=10
-    timeout=300
+- name: "Wait for server to restart."
+  local_action:
+    module: wait_for
+      host={{ inventory_hostname }}
+      port=22
+      delay=10
+      timeout=300
   become: false
   delegate_to: localhost
   when:
     - ((reboot_hint is defined and reboot_hint | bool) and (upgrade_unattended_reboot | bool)) or (upgrade_force_reboot | bool)
+
+- name: Include Reporting Playbook.
+  include_tasks: "report.yml"
+  when: upgrade_reporting_enable | bool

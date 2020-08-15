@@ -11,6 +11,14 @@
     state: present
   with_items: "{{ upgrade_packages_on_hold }}"
 
+- name: Store List of Updates for further Inspection.
+  command: dnf check-update
+  args:
+    warn: false
+  register: upgrade_update_list_dnf
+  failed_when: upgrade_update_list_dnf.rc > 100
+  ignore_errors: 'true'
+
 - name: Upgrade via DNF.
   dnf:
     name: "*"

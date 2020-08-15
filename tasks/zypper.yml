@@ -4,6 +4,7 @@
   args:
     warn: false
   when: ansible_distribution == "openSUSE Leap" #and ansible_distribution_major_version == "42"
+  ignore_errors: 'yes'
 
 - name: Ensure Dependencies are present.
   package:
@@ -15,6 +16,13 @@
   args:
      warn: false
   with_items: "{{ upgrade_packages_on_hold }}"
+
+- name: Store List of Updates for further Inspection.
+  command: zypper lu
+  args:
+    warn: false
+  register: upgrade_update_list_zypper
+  ignore_errors: 'true'
 
 - name: Upgrade via ZYPPER.
   zypper:
@@ -34,6 +42,7 @@
      warn: false
   register: reboot_hint_zypper
   changed_when: "'The following running processes use deleted files' in reboot_hint_zypper.stdout"
+  ignore_errors: 'yes'
 
 - name: Set Reboot Hint.
   set_fact:
