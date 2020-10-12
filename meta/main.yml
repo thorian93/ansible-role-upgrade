@@ -3,3 +3,37 @@ galaxy_info:
   author: Thorian93
   description: Ansible Role Upgrade
   license: "license (MIT)"
+
+  platforms:
+    - name: CentOS
+      versions:
+      - 7
+      - 8
+    - name: Debian
+      versions:
+      - 9
+      - 10
+    - name: Fedora
+      versions:
+      - 30
+      - 31
+      - 32
+    - name: opensuse
+      versions:
+      - 15.2
+      - 42.2
+    - name: SLES
+      versions:
+      - 11
+      - 12
+    - name: Ubuntu
+      versions:
+      - 16
+      - 18
+      - 20
+
+  galaxy_tags:
+    - linux
+    - server
+    - update
+    - upgrade
