@@ -1,18 +1,36 @@
 ---
 - name: "Generate Report Files per Host."
-  become: no
+  become: 'no'
   template:
     src: report.j2
     dest: "{{ upgrade_reporting_path }}/report_{{ inventory_hostname }}.txt"
   delegate_to: localhost
 
 - name: "Empty Full Report File."
-  become: no
-  shell: 'echo -e "Generated: $(date)\n" > {{ upgrade_reporting_path }}/report_full.txt'
+  become: 'no'
+  shell: '/bin/echo -e "Generated: $(date)\n\n" > "{{ upgrade_reporting_path }}/report_full.txt"'
   delegate_to: localhost
   run_once: true
 
 - name: "Concatenate Report Files."
-  become: no
+  become: 'no'
   shell: 'cat {{ upgrade_reporting_path }}/report_{{ inventory_hostname }}.txt >> {{ upgrade_reporting_path }}/report_full.txt'
   delegate_to: localhost
+  throttle: 1
+
+- name: "Send Reports per Mail."
+  become: 'no'
+  mail:
+    host: "{{ upgrade_reporting_mail_host }}"
+    port: "{{ upgrade_reporting_mail_port }}"
+    username: "{{ upgrade_reporting_mail_user | default(omit) }}"
+    password: "{{ upgrade_reporting_mail_password | default(omit) }}"
+    subject: "{{ upgrade_reporting_mail_subject }}"
+    body: "{{ lookup('file', '{{ upgrade_reporting_path }}/report_full.txt') }}"
+    from: "{{ upgrade_reporting_mail_from }}"
+    to: "{{ upgrade_reporting_mail_to }}"
+    attach:
+      - '{{ upgrade_reporting_path }}/report_full.txt'
+  delegate_to: localhost
+  run_once: "{{ upgrade_reporting_mail_run_once }}"
+  when: upgrade_reporting_mail_enable | bool

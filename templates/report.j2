@@ -1,14 +1,8 @@
-Update Report for: {{ inventory_hostname }}
+Installed Updates for {{ inventory_hostname }}:
 
-{% if upgrade_update_list_apt is defined %}
-{{ upgrade_update_list_apt.stdout_lines | to_nice_json | replace('[','') | replace(']','') | replace(',','') | replace('"','') | replace('Listing...','') }}
+{% if upgrade_update_list_apt is defined %}{{ upgrade_update_list_apt.stdout_lines | to_nice_json | replace('[','') | replace(']','') | replace(',','') | replace('"','') | replace('Listing...','') | trim }}
+{% elif upgrade_update_list_dnf is defined %}{{ upgrade_update_list_dnf.stdout_lines | to_nice_json | replace('[','') | replace(']','') | replace(',','') | replace('"','') | replace('Loading mirror speeds from cached hostfile','') | trim }}
+{% elif upgrade_update_list_yum is defined %}{{ upgrade_update_list_yum.stdout_lines | to_nice_json | replace('[','') | replace(']','') | replace(',','') | replace('"','') | replace('Loading mirror speeds from cached hostfile','') | trim }}
+{% elif upgrade_update_list_zypper is defined %}{{ upgrade_update_list_zypper.stdout_lines | to_nice_json | replace('[','') | replace(']','') | replace(',','') | replace('"','') | replace('Loading repository data...','') | replace('Reading installed packages...','') | trim }}
 {% endif %}
-{% if upgrade_update_list_dnf is defined %}
-{{ upgrade_update_list_dnf.stdout_lines | to_nice_json | replace('[','') | replace(']','') | replace(',','') | replace('"','') | replace('Loading mirror speeds from cached hostfile','') }}
-{% endif %}
-{% if upgrade_update_list_yum is defined %}
-{{ upgrade_update_list_yum.stdout_lines | to_nice_json | replace('[','') | replace(']','') | replace(',','') | replace('"','') | replace('Loading mirror speeds from cached hostfile','') }}
-{% endif %}
-{% if upgrade_update_list_zypper is defined %}
-{{ upgrade_update_list_zypper.stdout_lines | to_nice_json | replace('[','') | replace(']','') | replace(',','') | replace('"','') | replace('Loading repository data...','') | replace('Reading installed packages...','') }}
-{% endif %}
+

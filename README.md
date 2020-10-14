@@ -1,5 +1,9 @@
 # Ansible Role: Upgrade
 
+[![Ansible Role: Upgrade](https://img.shields.io/ansible/role/51284?style=flat-square)](https://galaxy.ansible.com/thorian93/ansible_role_upgrade)
+[![Ansible Role: Upgrade](https://img.shields.io/ansible/quality/51284?style=flat-square)](https://galaxy.ansible.com/thorian93/ansible_role_upgrade)
+[![Ansible Role: Upgrade](https://img.shields.io/ansible/role/d/51284?style=flat-square)](https://galaxy.ansible.com/thorian93/ansible_role_upgrade)
+
 This role performs upgrades on RHEL/CentOS, Debian/Ubuntu and Fedora servers.
 
 ## Here be Dragons!
@@ -28,7 +32,7 @@ No special requirements; note that this role requires root access, so either run
         - role: ansible-role-upgrade
           become: yes
 
-Also this role only **checks if the system is available at port 22** after a reboot. For further checks and monitoring refer to my [ansible-playbooks](https://github.com/thorian93/ansible-playbooks) repository and look for the example `ansible-role-upgrade.yml` and the corresponding `checkhost.yml` playbooks.
+Also this role only **checks if the system is available at port 22** after a reboot. If you need further checks or validation you need to take care of that yourself.
 
 ## Role Variables
 
@@ -53,6 +57,40 @@ Enable the reporting function of this role to output the installed updates and o
     upgrade_reporting_path: "."
 
 Define where the reports should be placed. Default is your current working directory.
+
+    upgrade_reporting_mail_enable: "false"
+
+Enable an email reporting the installed updates.
+
+    upgrade_reporting_mail_subject: "Ansible Update Role Reporting"
+
+Configure the subject of the mail.
+
+    upgrade_reporting_mail_to: []
+
+Define the recipient(s) of the mail.
+
+    upgrade_reporting_mail_from: []
+
+Define the sender of the mail.
+
+    upgrade_reporting_mail_host: []
+
+Define the mail server or relay.
+
+    upgrade_reporting_mail_port: []
+
+Define the mail server port.
+
+    upgrade_reporting_mail_user:
+    upgrade_reporting_mail_password:
+
+If the mail server needs authentication, set a username and password here. **If no authentication is required, make sure to leave the variables blank as seen here! Do not make it empty as seen above.**
+
+
+    upgrade_reporting_mail_run_once: 'true'
+
+If you want to send one email per play set this to true. If you rather send one mail per host set it to `false`.
 
 ## Dependencies
 

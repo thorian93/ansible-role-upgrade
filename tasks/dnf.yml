@@ -1,17 +1,17 @@
 ---
-- name: Ensure Dependencies are present.
+- name: "Ensure Dependencies are present."
   package:
     name: dnf-utils
     state: present
 
-- name: Mark packages on hold.
+- name: "Mark packages on hold."
   lineinfile:
     path: /etc/dnf/dnf.conf
     line: 'exclude={{ item }}'
     state: present
   with_items: "{{ upgrade_packages_on_hold }}"
 
-- name: Store List of Updates for further Inspection.
+- name: "Store List of Updates for further Inspection."
   command: dnf check-update
   args:
     warn: false
@@ -19,33 +19,31 @@
   failed_when: upgrade_update_list_dnf.rc > 100
   ignore_errors: 'true'
 
-- name: Upgrade via DNF.
+- name: "Upgrade via DNF."
   dnf:
     name: "*"
     state: latest
 
-- name: Cleanup via DNF.
+- name: "Cleanup via DNF."
   dnf:
-    autoremove: yes
-  ignore_errors: true # DNF Version too low
+    autoremove: 'yes'
 
-- name: Unhold packages.
+- name: "Unhold packages."
   lineinfile:
     path: /etc/dnf/dnf.conf
     line: 'exclude={{ item }}'
     state: absent
   with_items: "{{ upgrade_packages_on_hold }}"
 
-- name: Check for reboot hint.
+- name: "Check for reboot hint."
   shell: dnf needs-restarting -r
   args:
     warn: false
   register: reboot_hint_dnf
   failed_when: reboot_hint_dnf.rc >= 2
   changed_when: reboot_hint_dnf.rc == 1
-  ignore_errors: true # ToDo: Workaround
 
-- name: Set Reboot Hint.
+- name: "Set Reboot Hint."
   set_fact:
     reboot_hint: true
   when: reboot_hint_dnf.rc == 1

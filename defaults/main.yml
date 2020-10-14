@@ -1,21 +1,31 @@
 ---
-# OS Supported:
 upgrade_stable_os:
-  - Debian 9
-  - Debian 10
-  - Ubuntu 16
-  - Ubuntu 18
   - CentOS 7
   - CentOS 8
+  - Debian 9
+  - Debian 10
   - Fedora 30
   - Fedora 31
-  - SLES 11
-  - SLES 12
+  - Fedora 32
   - openSUSE Leap 15
   - openSUSE Leap 42
+  - SLES 11
+  - SLES 12
+  - Ubuntu 16
+  - Ubuntu 18
+  - Ubuntu 20
 
 upgrade_packages_on_hold: []
 upgrade_unattended_reboot: "true"
 upgrade_force_reboot: "false"
 upgrade_reporting_enable: "false"
 upgrade_reporting_path: "."
+upgrade_reporting_mail_enable: "false"
+upgrade_reporting_mail_subject: "Ansible Update Role Reporting"
+upgrade_reporting_mail_to: []
+upgrade_reporting_mail_from: []
+upgrade_reporting_mail_host: []
+upgrade_reporting_mail_port: []
+upgrade_reporting_mail_user:
+upgrade_reporting_mail_password:
+upgrade_reporting_mail_run_once: 'true'
