@@ -1,7 +1,7 @@
 ---
 - name: Update APT Cache.
   apt:
-    update_cache: yes
+    update_cache: 'yes'
     cache_valid_time: 3600
 
 - name: Ensure Dependencies are present.
@@ -26,16 +26,16 @@
   apt:
     upgrade: safe
     state: latest
-    update_cache: yes
+    update_cache: 'yes'
 
 - name: Cleanup via APT - autoremove.
   apt:
-    autoremove: yes
-    purge: yes
+    autoremove: 'yes'
+    purge: 'yes'
 
 - name: Cleanup via APT - autoclean.
   apt:
-    autoclean: yes
+    autoclean: 'yes'
 
 - name: Unhold packages.
   shell: apt-mark unhold {{ item }}

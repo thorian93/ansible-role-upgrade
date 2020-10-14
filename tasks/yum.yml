@@ -1,17 +1,17 @@
 ---
-- name: Ensure Dependencies are present.
+- name: "Ensure Dependencies are present."
   package:
     name: yum-utils
     state: present
 
-- name: Mark packages on hold.
+- name: "Mark packages on hold."
   lineinfile:
     path: /etc/yum.conf
     line: 'exclude={{ item }}'
     state: present
   with_items: "{{ upgrade_packages_on_hold }}"
 
-- name: Store List of Updates for further Inspection.
+- name: "Store List of Updates for further Inspection."
   command: yum check-update
   args:
     warn: false
@@ -19,31 +19,31 @@
   failed_when: upgrade_update_list_yum.rc > 100
   ignore_errors: 'true'
 
-- name: Upgrade via YUM.
+- name: "Upgrade via YUM."
   yum:
     name: "*"
     state: latest
-    update_cache: yes
+    update_cache: 'yes'
 
-- name: Cleanup via YUM.
+- name: "Cleanup via YUM."
   yum:
     state: absent
-    autoremove: yes
+    autoremove: 'yes'
 
-- name: Unhold packages.
+- name: "Unhold packages."
   lineinfile:
     path: /etc/yum.conf
     line: 'exclude={{ item }}'
     state: absent
   with_items: "{{ upgrade_packages_on_hold }}"
 
-- name: Check for reboot hint.
+- name: "Check for reboot hint."
   shell: needs-restarting -r
   register: reboot_hint_yum
   failed_when: reboot_hint_yum.rc >= 2
   changed_when: reboot_hint_yum.rc == 1
 
-- name: Set Reboot Hint.
+- name: "Set Reboot Hint."
   set_fact:
     reboot_hint: true
   when: reboot_hint_yum.rc == 1
