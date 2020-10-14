@@ -62,7 +62,7 @@ None.
 
 This role ensures that it is not used against unsupported or untested operating systems by checking, if the right distribution name and major version number are present in a dedicated variable named like `<role-name>_stable_os`. You can find the variable in the role's default variable file at `defaults/main.yml`:
 
-    upgrade_stable_os:
+    role_stable_os:
       - Debian 10
       - Ubuntu 18
       - CentOS 7

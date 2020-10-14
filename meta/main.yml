@@ -4,15 +4,24 @@ galaxy_info:
   description: Ansible Role Upgrade
   license: "license (MIT)"
 
+  min_ansible_version: 2.5
+
+  galaxy_tags:
+    - linux
+    - server
+    - update
+    - upgrade
+    - system
+
   platforms:
-    - name: CentOS
+    - name: EL
       versions:
       - 7
       - 8
     - name: Debian
       versions:
-      - 9
-      - 10
+      - Stretch
+      - Buster
     - name: Fedora
       versions:
       - 30
@@ -28,12 +37,6 @@ galaxy_info:
       - 12
     - name: Ubuntu
       versions:
-      - 16
-      - 18
-      - 20
-
-  galaxy_tags:
-    - linux
-    - server
-    - update
-    - upgrade
+      - Xenial
+      - Bionic
+      - Focal
