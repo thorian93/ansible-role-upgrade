@@ -11,21 +11,10 @@
 
 - name: "Reboot Server."
   become: yes
-  shell: 'sleep 1 && shutdown -r now "Reboot triggered by Ansible" && sleep 1'
-  async: 1
-  poll: 0
-  when:
-    - ((reboot_hint is defined and reboot_hint | bool) and (upgrade_unattended_reboot | bool)) or (upgrade_force_reboot | bool)
-
-- name: "Wait for server to restart."
-  local_action:
-    module: wait_for
-      host={{ inventory_hostname }}
-      port=22
-      delay=10
-      timeout=300
-  become: false
-  delegate_to: localhost
+  reboot:
+    reboot_timeout: 300
+    post_reboot_delay: "{{ patchday_sleep | default('10') }}"
+    msg: "Reboot triggered by Ansible"
   when:
     - ((reboot_hint is defined and reboot_hint | bool) and (upgrade_unattended_reboot | bool)) or (upgrade_force_reboot | bool)
 
