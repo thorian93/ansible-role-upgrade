@@ -37,7 +37,7 @@ yaml-lint:
   tags:
     - shell
   script:
-    - yamllint tasks/*.yml
+    - yamllint ./
 
 shell-lint:
   stage: linting
