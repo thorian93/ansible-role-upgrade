@@ -53,6 +53,8 @@ deploy-github:
   script:
     - git remote set-url --push origin ${GITHUB_REPO}
     - git push origin HEAD:${CI_COMMIT_REF_NAME}
+  only:
+    - master
 
 open-issue:
   stage: finish
