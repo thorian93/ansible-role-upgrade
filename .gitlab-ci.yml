@@ -1,6 +1,7 @@
 ---
 variables:
   GITHUB_REPO: "git@github.com:thorian93/ansible-role-upgrade.git"
+  GITLAB_REPO: "git@gitlab.com:thorian93/ansible_role_upgrade.git"
 
 stages:
   - cleanup
@@ -46,7 +47,7 @@ shell-lint:
   script:
     - find ./ -name "*.sh" -exec shellcheck {} \;
 
-deploy-github:
+github-deploy-master:
   stage: deploy
   tags:
     - shell
@@ -55,6 +56,40 @@ deploy-github:
     - git push origin HEAD:${CI_COMMIT_REF_NAME}
   only:
     - master
+
+github-deploy-tags:
+  stage: deploy
+  tags:
+    - shell
+  script:
+    - git remote set-url --push origin ${GITHUB_REPO}
+    - git push origin ${CI_COMMIT_TAG}
+  only:
+    - tags
+  except:
+    - branches
+
+gitlab-deploy-master:
+  stage: deploy
+  tags:
+    - shell
+  script:
+    - git remote set-url --push origin ${GITLAB_REPO}
+    - git push origin HEAD:${CI_COMMIT_REF_NAME}
+  only:
+    - master
+
+gitlab-deploy-tags:
+  stage: deploy
+  tags:
+    - shell
+  script:
+    - git remote set-url --push origin ${GITLAB_REPO}
+    - git push origin ${CI_COMMIT_TAG}
+  only:
+    - tags
+  except:
+    - branches
 
 open-issue:
   stage: finish
