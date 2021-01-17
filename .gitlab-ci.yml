@@ -1,7 +1,8 @@
 ---
 variables:
-  GITHUB_REPO: "git@github.com:thorian93/ansible-role-upgrade.git"
-  GITLAB_REPO: "git@gitlab.com:thorian93/ansible_role_upgrade.git"
+  REPO_NAME: "ansible-role-upgrade"
+  GITHUB_REPO: "git@github.com:thorian93/${REPO_NAME}.git"
+  GITLAB_REPO: "git@gitlab.com:thorian93_ansible/${REPO_NAME}.git"
 
 stages:
   - cleanup
@@ -52,8 +53,8 @@ github-deploy-master:
   tags:
     - shell
   script:
-    - git remote add github ${GITHUB_REPO}
-    - git push github HEAD:${CI_COMMIT_REF_NAME}
+    - git remote set-url --push origin ${GITHUB_REPO}
+    - git push origin HEAD:${CI_COMMIT_REF_NAME}
   only:
     - master
 
@@ -62,8 +63,8 @@ github-deploy-tags:
   tags:
     - shell
   script:
-    - git remote add github ${GITHUB_REPO}
-    - git push github ${CI_COMMIT_TAG}
+    - git remote set-url --push origin ${GITHUB_REPO}
+    - git push origin ${CI_COMMIT_TAG}
   only:
     - tags
   except:
