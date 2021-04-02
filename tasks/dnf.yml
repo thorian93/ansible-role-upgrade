@@ -14,10 +14,11 @@
 - name: "Store List of Updates for further Inspection."
   command: dnf check-update
   args:
-    warn: false
+    warn: 'false'
   register: upgrade_update_list_dnf
   failed_when: upgrade_update_list_dnf.rc > 100
   ignore_errors: 'true'
+  when: upgrade_reporting_enable | bool
 
 - name: "Upgrade via DNF."
   dnf:
@@ -38,12 +39,12 @@
 - name: "Check for reboot hint."
   shell: dnf needs-restarting -r
   args:
-    warn: false
+    warn: 'false'
   register: reboot_hint_dnf
   failed_when: reboot_hint_dnf.rc >= 2
   changed_when: reboot_hint_dnf.rc == 1
 
 - name: "Set Reboot Hint."
   set_fact:
-    reboot_hint: true
+    reboot_hint: 'true'
   when: reboot_hint_dnf.rc == 1

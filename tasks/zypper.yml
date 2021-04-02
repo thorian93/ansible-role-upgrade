@@ -2,7 +2,7 @@
 - name: "Workaround - Install python-xml."
   shell: zypper in -y python-xml
   args:
-    warn: false
+    warn: 'false'
   when: ansible_distribution == "openSUSE Leap" and ansible_distribution_major_version == "42"
   ignore_errors: 'yes'
 
@@ -14,15 +14,16 @@
 - name: "Mark packages on hold."
   shell: zypper al {{ item }}
   args:
-    warn: false
+    warn: 'false'
   with_items: "{{ upgrade_packages_on_hold }}"
 
 - name: "Store List of Updates for further Inspection."
   command: zypper lu
   args:
-    warn: false
+    warn: 'false'
   register: upgrade_update_list_zypper
   ignore_errors: 'true'
+  when: upgrade_reporting_enable | bool
 
 - name: "Upgrade via ZYPPER."
   zypper:
@@ -33,18 +34,18 @@
 - name: "Unhold packages."
   shell: zypper rl {{ item }}
   args:
-    warn: false
+    warn: 'false'
   with_items: "{{ upgrade_packages_on_hold }}"
 
 - name: "Check for reboot hint."
   shell: zypper ps -s
   args:
-    warn: false
+    warn: 'false'
   register: reboot_hint_zypper
   changed_when: "'The following running processes use deleted files' in reboot_hint_zypper.stdout"
   ignore_errors: 'yes'
 
 - name: "Set Reboot Hint."
   set_fact:
-    reboot_hint: true
+    reboot_hint: 'true'
   when: "'The following running processes use deleted files' in reboot_hint_zypper.stdout"

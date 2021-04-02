@@ -13,7 +13,7 @@
   shell: apt-mark hold {{ item }}
   args:
     executable: /bin/bash
-    warn: false
+    warn: 'false'
   with_items: "{{ upgrade_packages_on_hold }}"
   register: upgrade_apt_mark_status
   changed_when: upgrade_apt_mark_status.rc == 0 or "No packages found" in upgrade_apt_mark_status.stderr
@@ -22,8 +22,9 @@
 - name: "Store List of Updates for further Inspection."
   command: apt list --upgradable
   args:
-    warn: false
+    warn: 'false'
   register: upgrade_update_list_apt
+  when: upgrade_reporting_enable | bool
 
 - name: "Upgrade via APT."
   apt:
@@ -56,5 +57,5 @@
 
 - name: "Set Reboot Hint."
   set_fact:
-    reboot_hint: true
+    reboot_hint: 'true'
   when: "'NEEDRESTART-SVC' in reboot_hint_apt.stdout or 'NEEDRESTART-KSTA: 1' not in reboot_hint_apt.stdout"

@@ -10,7 +10,7 @@
   become: 'no'
   shell: '/bin/echo -e "Generated: $(date)\n\n" > "{{ upgrade_reporting_path }}/report_full.txt"'
   delegate_to: localhost
-  run_once: true
+  run_once: 'true'
 
 - name: "Concatenate Report Files."
   become: 'no'
