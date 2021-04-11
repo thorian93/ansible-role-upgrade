@@ -30,16 +30,18 @@
   apt:
     upgrade: safe
     state: latest
-    update_cache: 'yes'
+    cache_valid_time: 3600
 
 - name: "Cleanup via APT - autoremove."
   apt:
     autoremove: 'yes'
     purge: 'yes'
+    cache_valid_time: 3600
 
 - name: "Cleanup via APT - autoclean."
   apt:
     autoclean: 'yes'
+    cache_valid_time: 3600
 
 - name: "Unhold Packages."
   shell: apt-mark unhold {{ item }}
