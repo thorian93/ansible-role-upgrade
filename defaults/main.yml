@@ -7,6 +7,7 @@ upgrade_stable_os:
   - Fedora 30
   - Fedora 31
   - Fedora 32
+  - Fedora 33
   - openSUSE Leap 15
   - openSUSE Leap 42
   - SLES 11
@@ -18,6 +19,7 @@ upgrade_stable_os:
 upgrade_packages_on_hold: []
 upgrade_unattended_reboot: "true"
 upgrade_force_reboot: "false"
+
 upgrade_reporting_enable: "false"
 upgrade_reporting_path: "."
 upgrade_reporting_mail_enable: "false"
