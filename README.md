@@ -2,9 +2,9 @@
 
 This role performs upgrades on RHEL/CentOS, Debian/Ubuntu and Fedora servers.
 
-[![Ansible Role: Upgrade](https://img.shields.io/ansible/role/51284?style=flat-square)](https://galaxy.ansible.com/thorian93/ansible_role_upgrade)
-[![Ansible Role: Upgrade](https://img.shields.io/ansible/quality/51284?style=flat-square)](https://galaxy.ansible.com/thorian93/ansible_role_upgrade)
-[![Ansible Role: Upgrade](https://img.shields.io/ansible/role/d/51284?style=flat-square)](https://galaxy.ansible.com/thorian93/ansible_role_upgrade)
+[![Ansible Role: Upgrade](https://img.shields.io/ansible/role/55149?style=flat-square)](https://galaxy.ansible.com/thorian93/upgrade)
+[![Ansible Role: Upgrade](https://img.shields.io/ansible/quality/55149?style=flat-square)](https://galaxy.ansible.com/thorian93/upgrade)
+[![Ansible Role: Upgrade](https://img.shields.io/ansible/role/d/55149?style=flat-square)](https://galaxy.ansible.com/thorian93/upgrade)
 
 ## Here be Dragons!
 
