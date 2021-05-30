@@ -1,7 +1,8 @@
 ---
 galaxy_info:
-  author: Thorian93
-  description: Ansible Role Upgrade
+  role_name: upgrade
+  author: thorian93
+  description: Upgrade Management for Linux
   license: "license (MIT)"
 
   min_ansible_version: 2.9
