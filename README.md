@@ -1,6 +1,6 @@
 # Ansible Role: Upgrade
 
-This role performs upgrades on RHEL/CentOS, Debian/Ubuntu and Fedora servers.
+This role performs upgrades on Debian/Ubuntu, RHEL/CentOS and Fedora servers.
 
 [![Ansible Role: Upgrade](https://img.shields.io/ansible/role/55149?style=flat-square)](https://galaxy.ansible.com/thorian93/upgrade)
 [![Ansible Role: Upgrade](https://img.shields.io/ansible/quality/55149?style=flat-square)](https://galaxy.ansible.com/thorian93/upgrade)
@@ -29,7 +29,7 @@ No special requirements; note that this role requires root access, so either run
 
     - hosts: foobar
       roles:
-        - role: ansible-role-upgrade
+        - role: thorian93.upgrade
           become: yes
 
 Also this role only **checks if the system is available at port 22** after a reboot. If you need further checks or validation you need to take care of that yourself.
