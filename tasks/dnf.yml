@@ -36,7 +36,7 @@
     state: absent
   with_items: "{{ upgrade_packages_on_hold }}"
 
-- name: "Check for reboot hint."
+- name: "Check for Reboot Hint."
   shell: dnf needs-restarting -r
   args:
     warn: 'false'
@@ -44,7 +44,19 @@
   failed_when: reboot_hint_dnf.rc >= 2
   changed_when: reboot_hint_dnf.rc == 1
 
+- name: "Check for Service Restarts."
+  shell: dnf needs-restarting -s
+  args:
+    warn: 'false'
+  register: service_restarts_dnf
+  changed_when: "service_restarts_dnf.stdout_lines | length"
+
 - name: "Set Reboot Hint."
   set_fact:
     reboot_hint: 'true'
   when: reboot_hint_dnf.rc == 1
+
+- name: "Set Service Restarts."
+  set_fact:
+    service_restarts: "{{ service_restarts_dnf.stdout_lines }}"
+  when: "service_restarts_dnf.stdout_lines | length"
