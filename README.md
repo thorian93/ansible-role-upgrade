@@ -22,6 +22,7 @@ Neither of these methods are perfect but it works reasonably good. You might wan
 - CentOS 8: Reboot detection does not work as there is a flag missing for the dnf needs-restarting plugin. No reboot will be performed at any time.
 - Fedora 30: The dropping support for Python 2 in Fedora causes problems for Ansible. This can be fixed by setting the `ansible_python_interpreter` variable to the appropriate Python 3 binary.
 - **opensuse 15.2 and 42**: A missing dependency does not allow installation of a dependent tool. A workaround is in place. Also the upgrade process seems unstable. I will list these distributions as stable regarding below mentioned OS compatibility check anyway as currently the role does not seem to break stuff, but please be careful! Also feel free to give me a hint, if you know how to fix this stuff.
+- **opensuse 15.2 and 42**: The service restart detection uses a 'brute force' approach, as the output of `zypper ps -s` is a pain in the bum to parse. So for now these OS will simply reboot if any services need to be restarted.
 
 ## Requirements
 
@@ -41,6 +42,10 @@ Available variables are listed below, along with default values (see `defaults/m
     upgrade_packages_on_hold: []
 
 Set packages which you don't want to upgrade automatically on hold before upgrading.
+
+    upgrade_restart_services: 'true'
+
+Enable automatic service restarts. This causes the role to restart services which need restarting. Default is `true`, set to `false` to disable reboots.
 
     upgrade_unattended_reboot: "true"
 

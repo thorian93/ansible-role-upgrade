@@ -31,20 +31,30 @@
     state: absent
     autoremove: 'yes'
 
-- name: "Unhold packages."
+- name: "Unhold Packages."
   lineinfile:
     path: /etc/yum.conf
     line: 'exclude={{ item }}'
     state: absent
   with_items: "{{ upgrade_packages_on_hold }}"
 
-- name: "Check for reboot hint."
+- name: "Check for Reboot Hint."
   shell: needs-restarting -r
   register: reboot_hint_yum
   failed_when: reboot_hint_yum.rc >= 2
   changed_when: reboot_hint_yum.rc == 1
 
+- name: "Check for Service Restarts."
+  shell: needs-restarting -s
+  register: service_restarts_yum
+  changed_when: "service_restarts_yum.stdout | length"
+
 - name: "Set Reboot Hint."
   set_fact:
     reboot_hint: 'true'
   when: reboot_hint_yum.rc == 1
+
+- name: "Set Service Restarts."
+  set_fact:
+    service_restarts: "{{ service_restarts_yum.stdout_lines }}"
+  when: "service_restarts_yum.stdout_lines | length"

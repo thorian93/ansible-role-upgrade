@@ -55,9 +55,19 @@
 - name: "Check for Reboot Hint."
   shell: needrestart -b
   register: reboot_hint_apt
-  changed_when: "'NEEDRESTART-SVC' in reboot_hint_apt.stdout or 'NEEDRESTART-KSTA: 1' not in reboot_hint_apt.stdout"
+  changed_when: "'NEEDRESTART-KSTA: 1' not in reboot_hint_apt.stdout"
+
+- name: "Check for Service Restarts."
+  shell: needrestart -b | grep NEEDRESTART-SVC | cut -d ' ' -f2
+  register: service_restarts_apt
+  changed_when: "service_restarts_apt.stdout_lines | length"
 
 - name: "Set Reboot Hint."
   set_fact:
     reboot_hint: 'true'
-  when: "'NEEDRESTART-SVC' in reboot_hint_apt.stdout or 'NEEDRESTART-KSTA: 1' not in reboot_hint_apt.stdout"
+  when: "'NEEDRESTART-KSTA: 1' not in reboot_hint_apt.stdout"
+
+- name: "Set Service Restarts."
+  set_fact:
+    service_restarts: "{{ service_restarts_apt.stdout_lines }}"
+  when: "service_restarts_apt.stdout_lines | length"

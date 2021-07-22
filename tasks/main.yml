@@ -9,6 +9,17 @@
 - name: "Include Package Manager specific Playbook."
   include_tasks: "{{ ansible_pkg_mgr }}.yml"
 
+- name: "Restart Services."
+  become: 'yes'
+  service:
+    name: "{{ item }}"
+    state: restarted
+  loop: "{{ service_restarts }}"
+  when:
+    - ((reboot_hint is not defined) or reboot_hint is defined and not (upgrade_unattended_reboot | bool))
+    - (service_restarts is defined and service_restarts | length)
+    - (upgrade_restart_services | bool)
+
 - name: "Reboot Server."
   become: 'yes'
   reboot:
@@ -16,7 +27,8 @@
     post_reboot_delay: "{{ patchday_sleep | default('10') }}"
     msg: "Reboot triggered by Ansible"
   when:
-    - ((reboot_hint is defined and reboot_hint | bool) and (upgrade_unattended_reboot | bool)) or (upgrade_force_reboot | bool)
+    - (reboot_hint is defined and reboot_hint | bool)
+    - (upgrade_unattended_reboot | bool) or (upgrade_force_reboot | bool)
 
 - name: "Include Reporting Playbook."
   include_tasks: "report.yml"
