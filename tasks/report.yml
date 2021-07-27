@@ -8,7 +8,7 @@
 
 - name: "Empty Full Report File."
   become: 'no'
-  shell: '/bin/echo -e "Generated: $(date)\n\n" > "{{ upgrade_reporting_path }}/report_full.txt"'
+  shell: '/bin/printf "Generated: $(date)\n\n" > "{{ upgrade_reporting_path }}/report_full.txt"'
   delegate_to: localhost
   run_once: 'true'
 
