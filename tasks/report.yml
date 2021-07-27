@@ -32,5 +32,15 @@
     attach:
       - '{{ upgrade_reporting_path }}/report_full.txt'
   delegate_to: localhost
-  run_once: "{{ upgrade_reporting_mail_run_once }}"
+  run_once: "{{ upgrade_reporting_mail_run_once | bool }}"
   when: upgrade_reporting_mail_enable | bool
+
+- name: "Clean up Report Files."
+  become: 'no'
+  file:
+    path: "{{ item }}"
+    state: absent
+  delegate_to: localhost
+  loop:
+    - "{{ upgrade_reporting_path }}/report_{{ inventory_hostname }}.txt"
+    - "{{ upgrade_reporting_path }}/report_full.txt"
