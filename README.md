@@ -1,32 +1,43 @@
 # Ansible Role: Upgrade
 
-This role performs upgrades on Debian/Ubuntu, RHEL/CentOS and Fedora servers.
+This role performs upgrades on Debian/Ubuntu, RHEL/CentOS, Fedora and Suse servers.
 
 [![Ansible Role: Upgrade](https://img.shields.io/ansible/role/55149?style=flat-square)](https://galaxy.ansible.com/thorian93/upgrade)
 [![Ansible Role: Upgrade](https://img.shields.io/ansible/quality/55149?style=flat-square)](https://galaxy.ansible.com/thorian93/upgrade)
 [![Ansible Role: Upgrade](https://img.shields.io/ansible/role/d/55149?style=flat-square)](https://galaxy.ansible.com/thorian93/upgrade)
 
+## Features
+
+- Reboot detection and automatic reboot
+- Service restart detection and automatic service restarts
+- Upgrade reporting
+  - via Mail
+  - via Telegram
+
 ## Here be Dragons!
 
-The reboot check for apt is implemented via [needrestart](https://github.com/liske/needrestart). It checks for services that need a restart and newer kernels.
-If it finds any of those a reboot will be performed, unless you disable it via the dedicated variable.
-
-For Fedora this check is implemented through the dnf plugin [needs-restarting](https://dnf-plugins-core.readthedocs.io/en/latest/needs_restarting.html).
+The reboot and service restart checks for APT are implemented via [needrestart](https://github.com/liske/needrestart). For Fedora this is implemented through the dnf plugin [needs-restarting](https://dnf-plugins-core.readthedocs.io/en/latest/needs_restarting.html).
 For RHEL/CentOS it is implemented through the [needs-restarting](https://dnf-plugins-core.readthedocs.io/en/latest/needs_restarting.html) tool.
-For both Fedora and RHEL/CentOS a reboot will be performed based on the return code of the respective tool, unless you disable it via the dedicated role variable.
+
+The role uses the output or return codes respectively to decide what actions to take. You can configure the behavior through the variables below.
 
 Neither of these methods are perfect but it works reasonably good. You might want to look through the role before using it though.
 
 ## Known issues
 
 - CentOS 8: Reboot detection does not work as there is a flag missing for the dnf needs-restarting plugin. No reboot will be performed at any time.
-- Fedora 30: The dropping support for Python 2 in Fedora causes problems for Ansible. This can be fixed by setting the `ansible_python_interpreter` variable to the appropriate Python 3 binary.
-- **opensuse 15.2 and 42**: A missing dependency does not allow installation of a dependent tool. A workaround is in place. Also the upgrade process seems unstable. I will list these distributions as stable regarding below mentioned OS compatibility check anyway as currently the role does not seem to break stuff, but please be careful! Also feel free to give me a hint, if you know how to fix this stuff.
-- **opensuse 15.2 and 42**: The service restart detection uses a 'brute force' approach, as the output of `zypper ps -s` is a pain in the bum to parse. So for now these OS will simply reboot if any services need to be restarted.
+- **opensuse 15 and 42**: A missing dependency does not allow installation of a dependent tool. A workaround is in place. Also the upgrade process seems unstable. I will list these distributions as stable regarding below mentioned OS compatibility check anyway as currently the role does not seem to break stuff, but please be careful! Also feel free to give me a hint, if you know how to fix this stuff.
+- **opensuse 15 and 42**: The service restart detection uses a 'brute force' approach, as the output of `zypper ps -s` is a pain in the bum to parse. So for now these OS will simply reboot if any services need to be restarted.
 
 ## Requirements
 
-No special requirements; note that this role requires root access, so either run it in a playbook with a global `become: yes`, or invoke the role in your playbook like:
+When using the reporting via Telegram feature: 
+
+    collections:
+    - name: community.general
+      version: 3.4.0
+
+Note that this role requires root access, so either run it in a playbook with a global `become: yes`, or invoke the role in your playbook like:
 
     - hosts: foobar
       roles:
@@ -63,9 +74,17 @@ Enable the reporting function of this role to output the installed updates and o
 
 Define where the reports should be placed. Default is your current working directory.
 
+    upgrade_reporting_cleanup: 'true'
+
+Clean up the report files used to send reports. Might be useful for debugging to keep them.
+
+    upgrade_reporting_telegram_enable: 'false'
+
+Enable reporting via Telegram.
+
     upgrade_reporting_mail_enable: "false"
 
-Enable an email reporting the installed updates.
+Enable reporting via Mail.
 
     upgrade_reporting_mail_subject: "Ansible Update Role Reporting"
 

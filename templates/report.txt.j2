@@ -18,14 +18,3 @@ Updates installed:
 {% elif upgrade_update_list_yum is defined %}{{ upgrade_update_list_yum.stdout_lines | to_nice_json | replace('[','') | replace(']','') | replace(',','') | replace('"','') | replace('Loading mirror speeds from cached hostfile','') | trim }}
 {% elif upgrade_update_list_zypper is defined %}{{ upgrade_update_list_zypper.stdout_lines | to_nice_json | replace('[','') | replace(']','') | replace(',','') | replace('"','') | replace('Loading repository data...','') | replace('Reading installed packages...','') | trim }}
 {% endif %}
-
-{# 
-  when:
-    - ((reboot_hint is not defined) or reboot_hint is defined and not (upgrade_unattended_reboot | bool))
-    - (service_restarts is defined and service_restarts | length)
-    - (upgrade_restart_services | bool)
-
-  when:
-    - (reboot_hint is defined and reboot_hint | bool)
-    - (upgrade_unattended_reboot | bool) or (upgrade_force_reboot | bool)
-#}
