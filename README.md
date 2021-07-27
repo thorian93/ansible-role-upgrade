@@ -80,7 +80,15 @@ Clean up the report files used to send reports. Might be useful for debugging to
 
     upgrade_reporting_telegram_enable: 'false'
 
-Enable reporting via Telegram.
+Enable reporting via Telegram. **You need to configure the following two variables with your credentials to actually send messages via Telegram!** See [the module documentation](https://docs.ansible.com/ansible/latest/collections/community/general/telegram_module.html) for details.
+
+    upgrade_telegram_token:  []
+
+Your Telegram Bot Token.
+
+    upgrade_telegram_chatid: []
+
+Your Telegram Chat ID.
 
     upgrade_reporting_mail_enable: "false"
 
