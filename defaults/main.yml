@@ -23,7 +23,8 @@ upgrade_force_reboot: 'false'
 
 upgrade_reporting_enable: 'false'
 upgrade_reporting_path: "."
-upgrade_reporting_telegram_enable: 'true'
+upgrade_reporting_cleanup: 'true'
+upgrade_reporting_telegram_enable: 'false'
 upgrade_reporting_mail_enable: 'false'
 upgrade_reporting_mail_subject: "Ansible Update Role Reporting"
 upgrade_reporting_mail_to: []

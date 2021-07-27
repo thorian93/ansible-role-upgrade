@@ -1,12 +1,19 @@
 ---
-- name: "Generate Report Files per Host."
+- name: "Generate Plain Report Files per Host."
   become: 'no'
   template:
-    src: report.j2
+    src: report.txt.j2
     dest: "{{ upgrade_reporting_path }}/report_{{ inventory_hostname }}.txt"
   delegate_to: localhost
 
-- name: "Empty Full Report File."
+- name: "Generate Markdown Report Files per Host for Telegram."
+  become: 'no'
+  template:
+    src: report.mdv2.j2
+    dest: "{{ upgrade_reporting_path }}/report_{{ inventory_hostname }}.mdv2"
+  delegate_to: localhost
+
+- name: "Prepare Full Report File."
   become: 'no'
   shell: '/bin/printf "Generated: $(date)\n\n" > "{{ upgrade_reporting_path }}/report_full.txt"'
   delegate_to: localhost
@@ -18,7 +25,7 @@
   delegate_to: localhost
   throttle: 1
 
-- name: "Send Reports per Mail."
+- name: "Send Reports via Mail."
   become: 'no'
   mail:
     host: "{{ upgrade_reporting_mail_host }}"
@@ -42,7 +49,7 @@
     api_args:
       chat_id: "{{ upgrade_telegram_chatid }}"
       parse_mode: "MarkdownV2"
-      text: "{{ lookup('file', '{{ upgrade_reporting_path }}/report_{{ inventory_hostname }}.txt') | replace('.','\\.') | replace(':','\\:') | replace('-','\\-') | replace('_','\\_') | replace('+','\\+') }}"
+      text: "{{ lookup('file', '{{ upgrade_reporting_path }}/report_{{ inventory_hostname }}.mdv2') }}"
       disable_web_page_preview: True
       disable_notification: True
   delegate_to: localhost
@@ -54,6 +61,9 @@
     path: "{{ item }}"
     state: absent
   delegate_to: localhost
+  when: upgrade_reporting_cleanup | bool
   loop:
     - "{{ upgrade_reporting_path }}/report_{{ inventory_hostname }}.txt"
+    - "{{ upgrade_reporting_path }}/report_{{ inventory_hostname }}.mdv2"
     - "{{ upgrade_reporting_path }}/report_full.txt"
+    - "{{ upgrade_reporting_path }}/report_full.mdv2"

@@ -1,0 +1,31 @@
+*Update Report for {{ inventory_hostname | replace('.','\\.') | replace(':','\\:') | replace('-','\\-') | replace('_','\\_') | replace('+','\\+') }}*
+
+*Reboots and Services\:*
+{% if (reboot_hint is defined and reboot_hint | bool) and ((upgrade_unattended_reboot | bool) or (upgrade_force_reboot | bool)) %}
+Server was rebooted\.
+{% elif service_restarts is defined and service_restarts | length %}
+The following services have been restarted\:
+{% for service in service_restarts %}
+_{{ service | replace('.','\\.') | replace(':','\\:') | replace('-','\\-') | replace('_','\\_') | replace('+','\\+') }}_
+{% endfor %}
+{% else %}
+No reboots or service restarts performed\.
+{% endif %}
+
+*Updates installed\:*
+{% if upgrade_update_list_apt is defined %}{{ upgrade_update_list_apt.stdout_lines | to_nice_json | replace('[','') | replace(']','') | replace(',','') | replace('"','') | replace('.','\\.') | replace(':','\\:') | replace('-','\\-') | replace('_','\\_') | replace('+','\\+') | replace('~','\\~') | replace('Listing\.\.\.','') | trim }}
+{% elif upgrade_update_list_dnf is defined %}{{ upgrade_update_list_dnf.stdout_lines | to_nice_json | replace('[','') | replace(']','') | replace(',','') | replace('"','') | replace('.','\\.') | replace(':','\\:') | replace('-','\\-') | replace('_','\\_') | replace('+','\\+') | replace('~','\\~') | replace('Loading mirror speeds from cached hostfile','') | trim }}
+{% elif upgrade_update_list_yum is defined %}{{ upgrade_update_list_yum.stdout_lines | to_nice_json | replace('[','') | replace(']','') | replace(',','') | replace('"','') | replace('.','\\.') | replace(':','\\:') | replace('-','\\-') | replace('_','\\_') | replace('+','\\+') | replace('~','\\~') | replace('Loading mirror speeds from cached hostfile','') | trim }}
+{% elif upgrade_update_list_zypper is defined %}{{ upgrade_update_list_zypper.stdout_lines | to_nice_json | replace('[','') | replace(']','') | replace(',','') | replace('"','') | replace('.','\\.') | replace(':','\\:') | replace('-','\\-') | replace('_','\\_') | replace('+','\\+') | replace('~','\\~') | replace('Loading repository data\.\.\.','') | replace('Reading installed packages\.\.\.','') | trim }}
+{% endif %}
+
+{# 
+  when:
+    - ((reboot_hint is not defined) or reboot_hint is defined and not (upgrade_unattended_reboot | bool))
+    - (service_restarts is defined and service_restarts | length)
+    - (upgrade_restart_services | bool)
+
+  when:
+    - (reboot_hint is defined and reboot_hint | bool)
+    - (upgrade_unattended_reboot | bool) or (upgrade_force_reboot | bool)
+#}
