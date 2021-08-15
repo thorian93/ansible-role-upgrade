@@ -50,6 +50,7 @@
     warn: 'false'
   register: service_restarts_dnf
   changed_when: "service_restarts_dnf.stdout_lines | length"
+  when: not (ansible_distribution == "Fedora" and ansible_distribution_major_version | int < 33)
 
 - name: "Set Reboot Hint."
   ansible.builtin.set_fact:
@@ -59,4 +60,4 @@
 - name: "Set Service Restarts."
   ansible.builtin.set_fact:
     service_restarts: "{{ service_restarts_dnf.stdout_lines }}"
-  when: "service_restarts_dnf.stdout_lines | length"
+  when: not (ansible_distribution == "Fedora" and ansible_distribution_major_version | int < 33) and "service_restarts_dnf.stdout_lines | length"
