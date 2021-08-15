@@ -9,6 +9,15 @@
     name: needrestart
     state: present
 
+- name: "Disable needrestart Interaction."
+  template:
+    src: needrestart.conf.j2
+    dest: /etc/needrestart/conf.d/interaction.conf
+    mode: 0644
+    owner: root
+    group: root
+  when: upgrade_needrestart_disable_interaction | bool
+
 - name: "Mark packages on hold."
   ansible.builtin.shell: apt-mark hold {{ item }}
   args:

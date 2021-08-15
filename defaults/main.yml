@@ -16,17 +16,24 @@ upgrade_stable_os:
   - Ubuntu 18
   - Ubuntu 20
 
+# Basic
 upgrade_packages_on_hold: []
 upgrade_restart_services: 'true'
 upgrade_unattended_reboot: 'true'
 upgrade_force_reboot: 'false'
+upgrade_needrestart_disable_interaction: 'true'
 
+# Reporting
 upgrade_reporting_enable: 'false'
 upgrade_reporting_path: "."
 upgrade_reporting_cleanup: 'true'
+
+## Telegram
 upgrade_reporting_telegram_enable: 'false'
 upgrade_telegram_token: []
 upgrade_telegram_chatid: []
+
+## Mail
 upgrade_reporting_mail_enable: 'false'
 upgrade_reporting_mail_subject: "Ansible Update Role Reporting"
 upgrade_reporting_mail_to: []
