@@ -49,7 +49,7 @@
     api_args:
       chat_id: "{{ upgrade_telegram_chatid }}"
       parse_mode: "MarkdownV2"
-      text: "{{ lookup('file', '{{ upgrade_reporting_path }}/report_{{ inventory_hostname }}.mdv2') }}"
+      text: "{{ lookup('file', '{{ upgrade_reporting_path }}/report_{{ inventory_hostname }}.mdv2')[:4096] }}"
       disable_web_page_preview: 'true'
       disable_notification: 'true'
   delegate_to: localhost
