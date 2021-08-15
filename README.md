@@ -26,6 +26,7 @@ Neither of these methods are perfect but it works reasonably good. You might wan
 ## Known issues
 
 - CentOS 8: Reboot detection does not work as there is a flag missing for the dnf needs-restarting plugin. No reboot will be performed at any time.
+- Fedora 32 and earlier: Service restart detection does not work as there is a flag missing for the dnf needs-restarting plugin. No service restarts will be performed at any time.
 - **opensuse 15 and 42**: A missing dependency does not allow installation of a dependent tool. A workaround is in place. Also the upgrade process seems unstable. I will list these distributions as stable regarding below mentioned OS compatibility check anyway as currently the role does not seem to break stuff, but please be careful! Also feel free to give me a hint, if you know how to fix this stuff.
 - **opensuse 15 and 42**: The service restart detection uses a 'brute force' approach, as the output of `zypper ps -s` is a pain in the bum to parse. So for now these OS will simply reboot if any services need to be restarted.
 
@@ -58,15 +59,19 @@ Set packages which you don't want to upgrade automatically on hold before upgrad
 
 Enable automatic service restarts. This causes the role to restart services which need restarting. Default is `true`, set to `false` to disable reboots.
 
-    upgrade_unattended_reboot: "true"
+    upgrade_unattended_reboot: 'true'
 
 Enable unattended reboot in case it is necessary after updates. Default is `true`, set to `false` to disable reboots.
 
-    upgrade_force_reboot: "false"
+    upgrade_force_reboot: 'false'
 
 Force a reboot of each server independent of the result of the reboot check. Default is `false`, set to `true` to enable forced reboots.
 
-    upgrade_reporting_enable: "false"
+    upgrade_needrestart_disable_interaction: 'true'
+
+The `needrestart` tool is used to determine necessary reboots and service restarts. Some distributions configure it to run interactively by default, which breaks this role. Therefore the default setting is to disable all interaction. Set this to `false` to keep interaction enabled. See the manpage for further details.
+
+    upgrade_reporting_enable: 'false'
 
 Enable the reporting function of this role to output the installed updates and optionally write them to file.
 
@@ -90,7 +95,7 @@ Your Telegram Bot Token.
 
 Your Telegram Chat ID.
 
-    upgrade_reporting_mail_enable: "false"
+    upgrade_reporting_mail_enable: 'false'
 
 Enable reporting via Mail.
 
