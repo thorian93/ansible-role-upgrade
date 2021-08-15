@@ -1,16 +1,16 @@
 ---
 - name: "Update APT Cache."
-  apt:
+  ansible.builtin.apt:
     update_cache: 'yes'
     cache_valid_time: 3600
 
 - name: "Ensure Dependencies are present."
-  package:
+  ansible.builtin.package:
     name: needrestart
     state: present
 
 - name: "Mark packages on hold."
-  shell: apt-mark hold {{ item }}
+  ansible.builtin.shell: apt-mark hold {{ item }}
   args:
     executable: /bin/bash
     warn: 'false'
@@ -20,31 +20,31 @@
   failed_when: upgrade_apt_mark_status.rc == 1000
 
 - name: "Store List of Updates for further Inspection."
-  command: apt list --upgradable
+  ansible.builtin.command: apt list --upgradable
   args:
     warn: 'false'
   register: upgrade_update_list_apt
   when: upgrade_reporting_enable | bool
 
 - name: "Upgrade via APT."
-  apt:
+  ansible.builtin.apt:
     upgrade: safe
     state: latest
     cache_valid_time: 3600
 
 - name: "Cleanup via APT - autoremove."
-  apt:
+  ansible.builtin.apt:
     autoremove: 'yes'
     purge: 'yes'
     cache_valid_time: 3600
 
 - name: "Cleanup via APT - autoclean."
-  apt:
+  ansible.builtin.apt:
     autoclean: 'yes'
     cache_valid_time: 3600
 
 - name: "Unhold Packages."
-  shell: apt-mark unhold {{ item }}
+  ansible.builtin.shell: apt-mark unhold {{ item }}
   args:
     executable: /bin/bash
   with_items: "{{ upgrade_packages_on_hold }}"
@@ -53,21 +53,21 @@
   failed_when: upgrade_apt_mark_status.rc == 1000
 
 - name: "Check for Reboot Hint."
-  shell: needrestart -b
+  ansible.builtin.shell: needrestart -b
   register: reboot_hint_apt
   changed_when: "'NEEDRESTART-KSTA: 1' not in reboot_hint_apt.stdout"
 
 - name: "Check for Service Restarts."
-  shell: needrestart -b | grep NEEDRESTART-SVC | cut -d ' ' -f2
+  ansible.builtin.shell: needrestart -b | grep NEEDRESTART-SVC | cut -d ' ' -f2
   register: service_restarts_apt
   changed_when: "service_restarts_apt.stdout_lines | length"
 
 - name: "Set Reboot Hint."
-  set_fact:
+  ansible.builtin.set_fact:
     reboot_hint: 'true'
   when: "'NEEDRESTART-KSTA: 1' not in reboot_hint_apt.stdout"
 
 - name: "Set Service Restarts."
-  set_fact:
+  ansible.builtin.set_fact:
     service_restarts: "{{ service_restarts_apt.stdout_lines }}"
   when: "service_restarts_apt.stdout_lines | length"

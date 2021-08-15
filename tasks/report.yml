@@ -1,33 +1,33 @@
 ---
 - name: "Generate Plain Report Files per Host."
   become: 'no'
-  template:
+  ansible.builtin.template:
     src: report.txt.j2
     dest: "{{ upgrade_reporting_path }}/report_{{ inventory_hostname }}.txt"
   delegate_to: localhost
 
 - name: "Generate Markdown Report Files per Host for Telegram."
   become: 'no'
-  template:
+  ansible.builtin.template:
     src: report.mdv2.j2
     dest: "{{ upgrade_reporting_path }}/report_{{ inventory_hostname }}.mdv2"
   delegate_to: localhost
 
 - name: "Prepare Full Report File."
   become: 'no'
-  shell: '/bin/printf "Generated: $(date)\n\n" > "{{ upgrade_reporting_path }}/report_full.txt"'
+  ansible.builtin.shell: '/bin/printf "Generated: $(date)\n\n" > "{{ upgrade_reporting_path }}/report_full.txt"'
   delegate_to: localhost
   run_once: 'true'
 
 - name: "Concatenate Report Files."
   become: 'no'
-  shell: 'cat {{ upgrade_reporting_path }}/report_{{ inventory_hostname }}.txt >> {{ upgrade_reporting_path }}/report_full.txt'
+  ansible.builtin.shell: 'cat {{ upgrade_reporting_path }}/report_{{ inventory_hostname }}.txt >> {{ upgrade_reporting_path }}/report_full.txt'
   delegate_to: localhost
   throttle: 1
 
 - name: "Send Reports via Mail."
   become: 'no'
-  mail:
+  ansible.builtin.mail:
     host: "{{ upgrade_reporting_mail_host }}"
     port: "{{ upgrade_reporting_mail_port }}"
     username: "{{ upgrade_reporting_mail_user | default(omit) }}"
@@ -57,7 +57,7 @@
 
 - name: "Clean up Report Files."
   become: 'no'
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: absent
   delegate_to: localhost

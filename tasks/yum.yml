@@ -1,18 +1,18 @@
 ---
 - name: "Ensure Dependencies are present."
-  package:
+  ansible.builtin.package:
     name: yum-utils
     state: present
 
 - name: "Mark packages on hold."
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/yum.conf
     line: 'exclude={{ item }}'
     state: present
   with_items: "{{ upgrade_packages_on_hold }}"
 
 - name: "Store List of Updates for further Inspection."
-  command: yum check-update
+  ansible.builtin.command: yum check-update
   args:
     warn: 'false'
   register: upgrade_update_list_yum
@@ -21,40 +21,40 @@
   when: upgrade_reporting_enable | bool
 
 - name: "Upgrade via YUM."
-  yum:
+  ansible.builtin.yum:
     name: "*"
     state: latest
     update_cache: 'yes'
 
 - name: "Cleanup via YUM."
-  yum:
+  ansible.builtin.yum:
     state: absent
     autoremove: 'yes'
 
 - name: "Unhold Packages."
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/yum.conf
     line: 'exclude={{ item }}'
     state: absent
   with_items: "{{ upgrade_packages_on_hold }}"
 
 - name: "Check for Reboot Hint."
-  shell: needs-restarting -r
+  ansible.builtin.shell: needs-restarting -r
   register: reboot_hint_yum
   failed_when: reboot_hint_yum.rc >= 2
   changed_when: reboot_hint_yum.rc == 1
 
 - name: "Check for Service Restarts."
-  shell: needs-restarting -s
+  ansible.builtin.shell: needs-restarting -s
   register: service_restarts_yum
   changed_when: "service_restarts_yum.stdout | length"
 
 - name: "Set Reboot Hint."
-  set_fact:
+  ansible.builtin.set_fact:
     reboot_hint: 'true'
   when: reboot_hint_yum.rc == 1
 
 - name: "Set Service Restarts."
-  set_fact:
+  ansible.builtin.set_fact:
     service_restarts: "{{ service_restarts_yum.stdout_lines }}"
   when: "service_restarts_yum.stdout_lines | length"

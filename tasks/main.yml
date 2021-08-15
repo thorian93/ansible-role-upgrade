@@ -1,17 +1,17 @@
 ---
 - name: "Preflight - Fail if target host is not stable for this Role."
-  fail:
+  ansible.builtin.fail:
     msg: "This role is not stable for the target operating system, {{ ansible_distribution }} {{ ansible_distribution_major_version }}."
   when: (ansible_distribution is not defined) or
         (ansible_distribution_version is not defined) or
         (ansible_distribution+" "+ansible_distribution_major_version not in upgrade_stable_os)
 
 - name: "Include Package Manager specific Playbook."
-  include_tasks: "{{ ansible_pkg_mgr }}.yml"
+  ansible.builtin.include_tasks: "{{ ansible_pkg_mgr }}.yml"
 
 - name: "Restart Services."
   become: 'yes'
-  service:
+  ansible.builtin.service:
     name: "{{ item }}"
     state: restarted
   loop: "{{ service_restarts }}"
@@ -22,7 +22,7 @@
 
 - name: "Reboot Server."
   become: 'yes'
-  reboot:
+  ansible.builtin.reboot:
     reboot_timeout: 300
     post_reboot_delay: "{{ patchday_sleep | default('10') }}"
     msg: "Reboot triggered by Ansible"
@@ -31,5 +31,5 @@
     - (upgrade_unattended_reboot | bool) or (upgrade_force_reboot | bool)
 
 - name: "Include Reporting Playbook."
-  include_tasks: "report.yml"
+  ansible.builtin.include_tasks: "report.yml"
   when: upgrade_reporting_enable | bool

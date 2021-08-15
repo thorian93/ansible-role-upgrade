@@ -1,18 +1,18 @@
 ---
 - name: "Ensure Dependencies are present."
-  package:
+  ansible.builtin.package:
     name: dnf-utils
     state: present
 
 - name: "Mark packages on hold."
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/dnf/dnf.conf
     line: 'exclude={{ item }}'
     state: present
   with_items: "{{ upgrade_packages_on_hold }}"
 
 - name: "Store List of Updates for further Inspection."
-  command: dnf check-update
+  ansible.builtin.command: dnf check-update
   args:
     warn: 'false'
   register: upgrade_update_list_dnf
@@ -21,23 +21,23 @@
   when: upgrade_reporting_enable | bool
 
 - name: "Upgrade via DNF."
-  dnf:
+  ansible.builtin.dnf:
     name: "*"
     state: latest
 
 - name: "Cleanup via DNF."
-  dnf:
+  ansible.builtin.dnf:
     autoremove: 'yes'
 
 - name: "Unhold packages."
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/dnf/dnf.conf
     line: 'exclude={{ item }}'
     state: absent
   with_items: "{{ upgrade_packages_on_hold }}"
 
 - name: "Check for Reboot Hint."
-  shell: dnf needs-restarting -r
+  ansible.builtin.shell: dnf needs-restarting -r
   args:
     warn: 'false'
   register: reboot_hint_dnf
@@ -45,18 +45,18 @@
   changed_when: reboot_hint_dnf.rc == 1
 
 - name: "Check for Service Restarts."
-  shell: dnf needs-restarting -s
+  ansible.builtin.shell: dnf needs-restarting -s
   args:
     warn: 'false'
   register: service_restarts_dnf
   changed_when: "service_restarts_dnf.stdout_lines | length"
 
 - name: "Set Reboot Hint."
-  set_fact:
+  ansible.builtin.set_fact:
     reboot_hint: 'true'
   when: reboot_hint_dnf.rc == 1
 
 - name: "Set Service Restarts."
-  set_fact:
+  ansible.builtin.set_fact:
     service_restarts: "{{ service_restarts_dnf.stdout_lines }}"
   when: "service_restarts_dnf.stdout_lines | length"
