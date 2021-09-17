@@ -25,6 +25,7 @@ galaxy_info:
       versions:
         - Stretch
         - Buster
+        - Bullseye
     - name: Fedora
       versions:
         - 31
