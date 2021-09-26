@@ -9,6 +9,8 @@ The following services have been restarted\:
 {% if service not in upgrade_restart_services_blacklist %}
 _{{ service | replace('.','\\.') | replace(':','\\:') | replace('-','\\-') | replace('_','\\_') | replace('+','\\+') }}_
 {% endif %}
+{% endfor %}
+{% for service in service_restarts %}
 Service restarts skipped due to blacklist\:
 {% if service in upgrade_restart_services_blacklist %}
 _{{ service | replace('.','\\.') | replace(':','\\:') | replace('-','\\-') | replace('_','\\_') | replace('+','\\+') }}_
