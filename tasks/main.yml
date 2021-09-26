@@ -19,6 +19,7 @@
     - ((reboot_hint is not defined) or reboot_hint is defined and not (upgrade_unattended_reboot | bool))
     - (service_restarts is defined and service_restarts | length)
     - (upgrade_restart_services | bool)
+    - (item not in upgrade_restart_services_blacklist)
 
 - name: "Reboot Server."
   become: 'yes'

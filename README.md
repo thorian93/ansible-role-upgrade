@@ -51,13 +51,12 @@ Also this role only **checks if the system is available at port 22** after a reb
 
 Available variables are listed below, along with default values (see `defaults/main.yml`):
 
+
+### Basic Variables
+
     upgrade_packages_on_hold: []
 
 Set packages which you don't want to upgrade automatically on hold before upgrading.
-
-    upgrade_restart_services: 'true'
-
-Enable automatic service restarts. This causes the role to restart services which need restarting. Default is `true`, set to `false` to disable reboots.
 
     upgrade_unattended_reboot: 'true'
 
@@ -71,6 +70,19 @@ Force a reboot of each server independent of the result of the reboot check. Def
 
 The `needrestart` tool is used to determine necessary reboots and service restarts. Some distributions configure it to run interactively by default, which breaks this role. Therefore the default setting is to disable all interaction. Set this to `false` to keep interaction enabled. See the manpage for further details.
 
+    upgrade_restart_services: 'true'
+
+Enable automatic service restarts. This causes the role to restart services which need restarting. Default is `true`, set to `false` to disable reboots.
+
+    upgrade_restart_services_blacklist:
+      - auditd.service
+      - dbus.service
+      - systemd-manager.service
+
+Blacklist services that should not or cannot be restarted. The default list ist based on and expanded per experience. Feel free to report services that need to be added here.
+
+### Reporting Variables
+
     upgrade_reporting_enable: 'false'
 
 Enable the reporting function of this role to output the installed updates and optionally write them to file.
@@ -83,6 +95,8 @@ Define where the reports should be placed. Default is your current working direc
 
 Clean up the report files used to send reports. Might be useful for debugging to keep them.
 
+### Telegram Reporting Variables
+
     upgrade_reporting_telegram_enable: 'false'
 
 Enable reporting via Telegram. **You need to configure the following two variables with your credentials to actually send messages via Telegram!** See [the module documentation](https://docs.ansible.com/ansible/latest/collections/community/general/telegram_module.html) for details.
@@ -94,6 +108,8 @@ Your Telegram Bot Token.
     upgrade_telegram_chatid: []
 
 Your Telegram Chat ID.
+
+### Mail Reporting Variables
 
     upgrade_reporting_mail_enable: 'false'
 

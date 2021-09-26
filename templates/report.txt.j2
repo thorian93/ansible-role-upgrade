@@ -6,7 +6,13 @@ Server was rebooted.
 {% elif service_restarts is defined and service_restarts | length %}
 The following services have been restarted:
 {% for service in service_restarts %}
+{% if service not in upgrade_restart_services_blacklist %}
 {{ service }}
+{% endif %}
+Service restarts skipped due to blacklist:
+{% if service in upgrade_restart_services_blacklist %}
+{{ service }}
+{% endif %}
 {% endfor %}
 {% else %}
 No reboots or service restarts performed.

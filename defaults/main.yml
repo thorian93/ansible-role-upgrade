@@ -19,10 +19,14 @@ upgrade_stable_os:
 
 # Basic
 upgrade_packages_on_hold: []
-upgrade_restart_services: 'true'
 upgrade_unattended_reboot: 'true'
 upgrade_force_reboot: 'false'
 upgrade_needrestart_disable_interaction: 'true'
+upgrade_restart_services: 'true'
+upgrade_restart_services_blacklist:
+  - auditd.service
+  - dbus.service
+  - systemd-manager.service
 
 # Reporting
 upgrade_reporting_enable: 'false'
