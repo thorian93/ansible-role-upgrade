@@ -18,7 +18,10 @@ Always write a clear log message for your commits. One-line messages are fine fo
 
 ## Coding conventions
 
-Start reading the code and you'll get the hang of it quite quickly. I  try to stick to Ansible and YAML conventions to the best of my knowledge. Additionally I keep the code clean and readable by following some simple guidelines:
+Start reading the code and you'll get the hang of it quite quickly.
+I try to stick to Ansible and YAML conventions to the best of my knowledge.
+I do appreciate if you use `yamllint` and `ansible-lint` to ensure proper linting. My repository contains configuration files for that.
+Additionally I keep the code clean and readable by following some simple guidelines:
 
   * Task names are enclosed by double quotation marks (`""`) and end with a period (`.`)
   * Truthy values are enclosed by single  quotation marks (`''`)
