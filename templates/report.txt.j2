@@ -6,15 +6,7 @@ Server was rebooted.
 {% elif service_restarts is defined and service_restarts | length %}
 The following services have been restarted:
 {% for service in service_restarts %}
-{% if service not in upgrade_restart_services_blacklist %}
-{{ service }}
-{% endif %}
-{% endfor %}
-{% for service in service_restarts %}
-Service restarts skipped due to blacklist:
-{% if service in upgrade_restart_services_blacklist %}
-{{ service }}
-{% endif %}
+{{ service }}{% if service in upgrade_restart_services_blacklist %} (skipped due to blacklist){% endif %} 
 {% endfor %}
 {% else %}
 No reboots or service restarts performed.
@@ -26,3 +18,4 @@ Updates installed:
 {% elif upgrade_update_list_yum is defined %}{{ upgrade_update_list_yum.stdout_lines | to_nice_json | replace('[','') | replace(']','') | replace(',','') | replace('"','') | replace('Loading mirror speeds from cached hostfile','') | trim }}
 {% elif upgrade_update_list_zypper is defined %}{{ upgrade_update_list_zypper.stdout_lines | to_nice_json | replace('[','') | replace(']','') | replace(',','') | replace('"','') | replace('Loading repository data...','') | replace('Reading installed packages...','') | trim }}
 {% endif %}
+
