@@ -4,7 +4,7 @@
   args:
     warn: false
   when: ansible_distribution == "openSUSE Leap" and ansible_distribution_major_version == "42"
-  ignore_errors: true
+  ignore_errors: true  # noqa ignore-errors
 
 - name: "Ensure Dependencies are present."
   ansible.builtin.package:

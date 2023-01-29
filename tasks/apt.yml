@@ -10,7 +10,7 @@
     state: present
 
 - name: "Disable needrestart Interaction."
-  template:
+  ansible.builtin.template:
     src: needrestart.conf.j2
     dest: /etc/needrestart/conf.d/interaction.conf
     mode: 0644
@@ -67,7 +67,9 @@
   changed_when: "'NEEDRESTART-KSTA: 1' not in reboot_hint_apt.stdout"
 
 - name: "Check for Service Restarts."
-  ansible.builtin.shell: needrestart -b | grep NEEDRESTART-SVC | cut -d ' ' -f2
+  ansible.builtin.shell: |
+    set -o pipefail
+    needrestart -b | grep NEEDRESTART-SVC | cut -d ' ' -f2
   register: service_restarts_apt
   changed_when: "service_restarts_apt.stdout_lines | length"
 

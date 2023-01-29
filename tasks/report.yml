@@ -4,6 +4,7 @@
   ansible.builtin.template:
     src: report.txt.j2
     dest: "{{ upgrade_reporting_path }}/report_{{ inventory_hostname }}.txt"
+    mode: 0640
   delegate_to: localhost
 
 - name: "Generate Markdown Report Files per Host for Telegram."
@@ -11,6 +12,7 @@
   ansible.builtin.template:
     src: report.mdv2.j2
     dest: "{{ upgrade_reporting_path }}/report_{{ inventory_hostname }}.mdv2"
+    mode: 0640
   delegate_to: localhost
 
 - name: "Prepare Full Report File."

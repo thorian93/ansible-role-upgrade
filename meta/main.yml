@@ -5,7 +5,7 @@ galaxy_info:
   description: Upgrade Management for Linux
   license: "license (MIT)"
 
-  min_ansible_version: 2.9
+  min_ansible_version: "2.9"
 
   galaxy_tags:
     - linux
