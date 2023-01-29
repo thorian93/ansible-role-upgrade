@@ -1,10 +1,10 @@
 ---
 parseable: true
 skip_list:
-  - 301
-  - 305
-  - 403
-  - ANSIBLE0012
+  - "301"
+  - "305"
+  - "403"
+  - "ANSIBLE0012"
 use_default_rules: true
 verbosity: 1
 exclude_paths: []
