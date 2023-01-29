@@ -43,10 +43,10 @@ upgrade_telegram_chatid: []
 ## Mail
 upgrade_reporting_mail_enable: false
 upgrade_reporting_mail_subject: "Ansible Update Role Reporting"
-upgrade_reporting_mail_to: []
-upgrade_reporting_mail_from: []
-upgrade_reporting_mail_host: []
-upgrade_reporting_mail_port: []
+upgrade_reporting_mail_to: ""
+upgrade_reporting_mail_from: ""
+upgrade_reporting_mail_host: ""
+upgrade_reporting_mail_port: ""
 upgrade_reporting_mail_user:
 upgrade_reporting_mail_password:
 upgrade_reporting_mail_run_once: true

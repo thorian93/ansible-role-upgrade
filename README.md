@@ -120,19 +120,19 @@ Enable reporting via Mail.
 
 Configure the subject of the mail.
 
-    upgrade_reporting_mail_to: []
+    upgrade_reporting_mail_to: ""
 
 Define the recipient(s) of the mail.
 
-    upgrade_reporting_mail_from: []
+    upgrade_reporting_mail_from: ""
 
 Define the sender of the mail.
 
-    upgrade_reporting_mail_host: []
+    upgrade_reporting_mail_host: ""
 
 Define the mail server or relay.
 
-    upgrade_reporting_mail_port: []
+    upgrade_reporting_mail_port: ""
 
 Define the mail server port.
 
