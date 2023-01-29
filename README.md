@@ -59,19 +59,19 @@ Available variables are listed below, along with default values (see `defaults/m
 
 Set packages which you don't want to upgrade automatically on hold before upgrading.
 
-    upgrade_unattended_reboot: 'true'
+    upgrade_unattended_reboot: true
 
 Enable unattended reboot in case it is necessary after updates. Default is `true`, set to `false` to disable reboots.
 
-    upgrade_force_reboot: 'false'
+    upgrade_force_reboot: false
 
 Force a reboot of each server independent of the result of the reboot check. Default is `false`, set to `true` to enable forced reboots.
 
-    upgrade_needrestart_disable_interaction: 'true'
+    upgrade_needrestart_disable_interaction: true
 
 The `needrestart` tool is used to determine necessary reboots and service restarts. Some distributions configure it to run interactively by default, which breaks this role. Therefore the default setting is to disable all interaction. Set this to `false` to keep interaction enabled. See the manpage for further details.
 
-    upgrade_restart_services: 'true'
+    upgrade_restart_services: true
 
 Enable automatic service restarts. This causes the role to restart services which need restarting. Default is `true`, set to `false` to disable reboots.
 
@@ -84,7 +84,7 @@ Blacklist services that should not or cannot be restarted. The default list ist 
 
 ### Reporting Variables
 
-    upgrade_reporting_enable: 'false'
+    upgrade_reporting_enable: false
 
 Enable the reporting function of this role to output the installed updates and optionally write them to file.
 
@@ -92,13 +92,13 @@ Enable the reporting function of this role to output the installed updates and o
 
 Define where the reports should be placed. Default is your current working directory.
 
-    upgrade_reporting_cleanup: 'true'
+    upgrade_reporting_cleanup: true
 
 Clean up the report files used to send reports. Might be useful for debugging to keep them.
 
 ### Telegram Reporting Variables
 
-    upgrade_reporting_telegram_enable: 'false'
+    upgrade_reporting_telegram_enable: false
 
 Enable reporting via Telegram. **You need to configure the following two variables with your credentials to actually send messages via Telegram!** See [the module documentation](https://docs.ansible.com/ansible/latest/collections/community/general/telegram_module.html) for details.
 
@@ -112,7 +112,7 @@ Your Telegram Chat ID.
 
 ### Mail Reporting Variables
 
-    upgrade_reporting_mail_enable: 'false'
+    upgrade_reporting_mail_enable: false
 
 Enable reporting via Mail.
 
@@ -142,7 +142,7 @@ Define the mail server port.
 If the mail server needs authentication, set a username and password here. **If no authentication is required, make sure to leave the variables blank as seen here! Do not make it empty as seen above.**
 
 
-    upgrade_reporting_mail_run_once: 'true'
+    upgrade_reporting_mail_run_once: true
 
 If you want to send one email per play set this to true. If you rather send one mail per host set it to `false`.
 

@@ -2,9 +2,9 @@
 - name: "Workaround - Install python-xml."
   ansible.builtin.shell: zypper in -y python-xml
   args:
-    warn: 'false'
+    warn: false
   when: ansible_distribution == "openSUSE Leap" and ansible_distribution_major_version == "42"
-  ignore_errors: 'yes'
+  ignore_errors: true
 
 - name: "Ensure Dependencies are present."
   ansible.builtin.package:
@@ -14,38 +14,38 @@
 - name: "Mark packages on hold."
   ansible.builtin.shell: zypper al {{ item }}
   args:
-    warn: 'false'
+    warn: false
   with_items: "{{ upgrade_packages_on_hold }}"
 
 - name: "Store List of Updates for further Inspection."
   ansible.builtin.command: zypper lu
   args:
-    warn: 'false'
+    warn: false
   register: upgrade_update_list_zypper
-  ignore_errors: 'true'
+  ignore_errors: true
   when: upgrade_reporting_enable | bool
 
 - name: "Upgrade via ZYPPER."
   ansible.builtin.zypper:
     name: "*"
     state: latest
-    update_cache: 'yes'
+    update_cache: true
 
 - name: "Unhold packages."
   ansible.builtin.shell: zypper rl {{ item }}
   args:
-    warn: 'false'
+    warn: false
   with_items: "{{ upgrade_packages_on_hold }}"
 
 - name: "Check for reboot hint."
   ansible.builtin.shell: zypper ps -s
   args:
-    warn: 'false'
+    warn: false
   register: reboot_hint_zypper
   changed_when: "'The following running processes use deleted files' in reboot_hint_zypper.stdout"
-  ignore_errors: 'yes'
+  ignore_errors: true
 
 - name: "Set Reboot Hint."
   ansible.builtin.set_fact:
-    reboot_hint: 'true'
+    reboot_hint: true
   when: "'The following running processes use deleted files' in reboot_hint_zypper.stdout"

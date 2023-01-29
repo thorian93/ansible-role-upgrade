@@ -1,8 +1,15 @@
 ---
-- name: "Ensure Dependencies are present."
+- name: "Ensure Dependencies are present. (Ansible Interpreter Python 2)"
   ansible.builtin.package:
     name: yum-utils
     state: present
+  when: not ansible_python.executable = "/usr/bin/python3"
+
+- name: "Ensure Dependencies are present. (Ansible Interpreter Python 3)"
+  ansible.builtin.dnf:
+    name: yum-utils
+    state: present
+  when: ansible_python.executable = "/usr/bin/python3"
 
 - name: "Mark packages on hold."
   ansible.builtin.lineinfile:
@@ -14,22 +21,22 @@
 - name: "Store List of Updates for further Inspection."
   ansible.builtin.command: yum check-update
   args:
-    warn: 'false'
+    warn: false
   register: upgrade_update_list_yum
   failed_when: upgrade_update_list_yum.rc > 100
-  ignore_errors: 'true'
+  ignore_errors: true
   when: upgrade_reporting_enable | bool
 
 - name: "Upgrade via YUM."
   ansible.builtin.yum:
     name: "*"
     state: latest
-    update_cache: 'yes'
+    update_cache: true
 
 - name: "Cleanup via YUM."
   ansible.builtin.yum:
     state: absent
-    autoremove: 'yes'
+    autoremove: true
 
 - name: "Unhold Packages."
   ansible.builtin.lineinfile:
@@ -51,7 +58,7 @@
 
 - name: "Set Reboot Hint."
   ansible.builtin.set_fact:
-    reboot_hint: 'true'
+    reboot_hint: true
   when: reboot_hint_yum.rc == 1
 
 - name: "Set Service Restarts."

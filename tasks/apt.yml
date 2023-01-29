@@ -1,7 +1,7 @@
 ---
 - name: "Update APT Cache."
   ansible.builtin.apt:
-    update_cache: 'yes'
+    update_cache: true
     cache_valid_time: 3600
 
 - name: "Ensure Dependencies are present."
@@ -22,7 +22,7 @@
   ansible.builtin.shell: apt-mark hold {{ item }}
   args:
     executable: /bin/bash
-    warn: 'false'
+    warn: false
   with_items: "{{ upgrade_packages_on_hold }}"
   register: upgrade_apt_mark_status
   changed_when: upgrade_apt_mark_status.rc == 0 or "No packages found" in upgrade_apt_mark_status.stderr
@@ -31,7 +31,7 @@
 - name: "Store List of Updates for further Inspection."
   ansible.builtin.command: apt list --upgradable
   args:
-    warn: 'false'
+    warn: false
   register: upgrade_update_list_apt
   when: upgrade_reporting_enable | bool
 
@@ -43,13 +43,13 @@
 
 - name: "Cleanup via APT - autoremove."
   ansible.builtin.apt:
-    autoremove: 'yes'
-    purge: 'yes'
+    autoremove: true
+    purge: true
     cache_valid_time: 3600
 
 - name: "Cleanup via APT - autoclean."
   ansible.builtin.apt:
-    autoclean: 'yes'
+    autoclean: true
     cache_valid_time: 3600
 
 - name: "Unhold Packages."
@@ -73,7 +73,7 @@
 
 - name: "Set Reboot Hint."
   ansible.builtin.set_fact:
-    reboot_hint: 'true'
+    reboot_hint: true
   when: "'NEEDRESTART-KSTA: 1' not in reboot_hint_apt.stdout"
 
 - name: "Set Service Restarts."

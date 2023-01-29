@@ -1,32 +1,32 @@
 ---
 - name: "Generate Plain Report Files per Host."
-  become: 'no'
+  become: false
   ansible.builtin.template:
     src: report.txt.j2
     dest: "{{ upgrade_reporting_path }}/report_{{ inventory_hostname }}.txt"
   delegate_to: localhost
 
 - name: "Generate Markdown Report Files per Host for Telegram."
-  become: 'no'
+  become: false
   ansible.builtin.template:
     src: report.mdv2.j2
     dest: "{{ upgrade_reporting_path }}/report_{{ inventory_hostname }}.mdv2"
   delegate_to: localhost
 
 - name: "Prepare Full Report File."
-  become: 'no'
+  become: false
   ansible.builtin.shell: '/bin/printf "Generated: $(date)\n\n" > "{{ upgrade_reporting_path }}/report_full.txt"'
   delegate_to: localhost
-  run_once: 'true'
+  run_once: true
 
 - name: "Concatenate Report Files."
-  become: 'no'
+  become: false
   ansible.builtin.shell: 'cat {{ upgrade_reporting_path }}/report_{{ inventory_hostname }}.txt >> {{ upgrade_reporting_path }}/report_full.txt'
   delegate_to: localhost
   throttle: 1
 
 - name: "Send Reports via Mail."
-  become: 'no'
+  become: false
   ansible.builtin.mail:
     host: "{{ upgrade_reporting_mail_host }}"
     port: "{{ upgrade_reporting_mail_port }}"
@@ -43,20 +43,20 @@
   when: upgrade_reporting_mail_enable | bool
 
 - name: "Send Reports via Telegram."
-  become: 'no'
+  become: false
   community.general.telegram:
     token: "{{ upgrade_telegram_token }}"
     api_args:
       chat_id: "{{ upgrade_telegram_chatid }}"
       parse_mode: "MarkdownV2"
       text: "{{ lookup('file', '{{ upgrade_reporting_path }}/report_{{ inventory_hostname }}.mdv2')[:4096] }}"
-      disable_web_page_preview: 'true'
-      disable_notification: 'true'
+      disable_web_page_preview: true
+      disable_notification: true
   delegate_to: localhost
   when: upgrade_reporting_telegram_enable | bool
 
 - name: "Clean up Report Files."
-  become: 'no'
+  become: false
   ansible.builtin.file:
     path: "{{ item }}"
     state: absent

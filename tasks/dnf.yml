@@ -14,10 +14,10 @@
 - name: "Store List of Updates for further Inspection."
   ansible.builtin.command: dnf check-update
   args:
-    warn: 'false'
+    warn: false
   register: upgrade_update_list_dnf
   failed_when: upgrade_update_list_dnf.rc > 100
-  ignore_errors: 'true'
+  ignore_errors: true
   when: upgrade_reporting_enable | bool
 
 - name: "Upgrade via DNF."
@@ -27,7 +27,7 @@
 
 - name: "Cleanup via DNF."
   ansible.builtin.dnf:
-    autoremove: 'yes'
+    autoremove: true
 
 - name: "Unhold packages."
   ansible.builtin.lineinfile:
@@ -39,7 +39,7 @@
 - name: "Check for Reboot Hint."
   ansible.builtin.shell: dnf needs-restarting -r
   args:
-    warn: 'false'
+    warn: false
   register: reboot_hint_dnf
   failed_when: reboot_hint_dnf.rc >= 2
   changed_when: reboot_hint_dnf.rc == 1
@@ -47,14 +47,14 @@
 - name: "Check for Service Restarts."
   ansible.builtin.shell: dnf needs-restarting -s
   args:
-    warn: 'false'
+    warn: false
   register: service_restarts_dnf
   changed_when: "service_restarts_dnf.stdout_lines | length"
   when: not (ansible_distribution == "Fedora" and ansible_distribution_major_version | int < 33)
 
 - name: "Set Reboot Hint."
   ansible.builtin.set_fact:
-    reboot_hint: 'true'
+    reboot_hint: true
   when: reboot_hint_dnf.rc == 1
 
 - name: "Set Service Restarts."

@@ -10,7 +10,7 @@
   ansible.builtin.include_tasks: "{{ ansible_pkg_mgr }}.yml"
 
 - name: "Restart Services."
-  become: 'yes'
+  become: true
   ansible.builtin.service:
     name: "{{ item }}"
     state: restarted
@@ -22,7 +22,7 @@
     - (item not in upgrade_restart_services_blacklist)
 
 - name: "Reboot Server."
-  become: 'yes'
+  become: true
   ansible.builtin.reboot:
     reboot_timeout: 300
     post_reboot_delay: "{{ patchday_sleep | default('10') }}"
