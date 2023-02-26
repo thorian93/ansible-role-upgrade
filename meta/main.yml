@@ -33,6 +33,8 @@ galaxy_info:
         - 33
         - 34
         - 35
+        - 36
+        - 37
     - name: opensuse
       versions:
         - 15.2
