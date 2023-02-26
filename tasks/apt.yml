@@ -22,7 +22,6 @@
   ansible.builtin.shell: apt-mark hold {{ item }}
   args:
     executable: /bin/bash
-    warn: false
   with_items: "{{ upgrade_packages_on_hold }}"
   register: upgrade_apt_mark_status
   changed_when: upgrade_apt_mark_status.rc == 0 or "No packages found" in upgrade_apt_mark_status.stderr
@@ -31,7 +30,6 @@
 - name: "Store List of Updates for further Inspection."
   ansible.builtin.command: apt list --upgradable
   args:
-    warn: false
   register: upgrade_update_list_apt
   when: upgrade_reporting_enable | bool
 
