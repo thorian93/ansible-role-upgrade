@@ -1,5 +1,14 @@
 # Ansible Role: Upgrade
 
+---
+
+## Unmaintained! Moved to collection!
+This role has moved to my [**main** collection](https://github.com/thorian93/main).  
+It is **not** maintained here anymore!  
+Head over to the [collection](https://github.com/thorian93/main) for up to date content.
+
+---
+
 This role performs upgrades on Debian/Ubuntu, RHEL/CentOS, Fedora and Suse servers.
 
 [![Ansible Role: Upgrade](https://img.shields.io/ansible/role/55149?style=flat-square)](https://galaxy.ansible.com/thorian93/upgrade)
